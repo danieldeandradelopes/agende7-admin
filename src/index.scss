@@ -1,0 +1,60 @@
+@import url("./styles/branding.scss");
+@import url("./styles/inputs.scss");
+@import url("./styles/buttons.scss");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  background-color: var(--app-background);
+
+  color: var(--text-default);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  font-size: 62.5%;
+
+  [class="ant-checkbox-input"] {
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+
+    &:checked {
+      & + .ant-checkbox-inner {
+        background-color: var(--btn-primary-bg);
+        border-color: var(--btn-primary-bg);
+      }
+    }
+  }
+
+  [class="ant-select-selector"] {
+    background-color: var(--input-bg) !important;
+    color: var(--input-text) !important;
+    border: none !important;
+    font-size: 1.6rem !important;
+  }
+}
+
+body {
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+
+  font-size: 14px;
+}
+
+form {
+  fieldset {
+    border: none;
+  }
+}

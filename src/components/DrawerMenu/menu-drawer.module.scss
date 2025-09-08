@@ -1,0 +1,92 @@
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.menuButton {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  color: var(--color-text-secondary);
+  font-size: 24px;
+  padding: 8px;
+  height: auto;
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.drawer {
+  :global {
+    .ant-drawer-header {
+      background-color: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .ant-drawer-title {
+      color: var(--color-text-secondary);
+    }
+
+    .ant-drawer-close {
+      color: var(--color-text-secondary);
+    }
+
+    .ant-drawer-body {
+      background-color: var(--color-surface);
+      padding: 16px;
+    }
+
+    .ant-menu-vertical {
+      padding: 0;
+      background-color: var(--color-surface);
+    }
+
+    .ant-menu-item {
+      background-color: var(--color-surface);
+      border: none;
+      color: var(--color-text-secondary);
+
+      border: 1px solid var(--color-border);
+      height: 48px;
+
+      &:hover {
+        color: var(--color-primary);
+      }
+    }
+  }
+}
+
+.menuContent {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-border);
+
+  color: var(--color-text-secondary);
+}
+
+.userName {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.userRole {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}

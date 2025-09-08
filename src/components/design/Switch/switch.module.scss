@@ -1,0 +1,9 @@
+.container {
+  :global(.ant-switch-inner) {
+    color: var(--color-text-primary);
+  }
+
+  :global(.ant-switch.ant-switch-checked) {
+    background-color: var(--color-primary);
+  }
+}

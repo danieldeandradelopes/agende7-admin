@@ -1,0 +1,26 @@
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+  border-radius: 8px;
+  padding: 0 8px;
+}
+
+.statusText {
+  font-size: 12px;
+  text-align: center;
+  color: white;
+}
+
+.pendingStatus {
+  background-color: var(--color-warning);
+}
+
+.approvedStatus {
+  background-color: var(--color-success);
+}
+
+.doneStatus {
+  background-color: var(--color-text-secondary);
+}

@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+
+  h1 {
+    margin-top: -28px;
+
+    text-align: center;
+    font-size: 4rem;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    letter-spacing: 6.4px;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  margin: 32px 16px 0 16px;
+
+  input {
+    &:last-of-type {
+      margin-top: 8px;
+    }
+  }
+}
+
+.float {
+  margin-bottom: 24px;
+  width: 61px;
+  height: 61px;
+
+  [class="ant-float-btn-body"] {
+    background-color: var(--color-primary);
+    &:hover {
+      background-color: var(--color-primary);
+    }
+  }
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 24px;
+}
+
+.content {
+  width: 400px;
+}
