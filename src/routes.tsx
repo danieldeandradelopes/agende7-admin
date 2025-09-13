@@ -4,6 +4,7 @@ import { useAuth } from "./hooks/utils/use-auth";
 
 const Dashboard = lazy(() => import("@/pages/Dashboard/index"));
 const Barbershops = lazy(() => import("@/pages/Barbershops/index"));
+const Plans = lazy(() => import("@/pages/Plans/index"));
 const Login = lazy(() => import("@/pages/Login/index"));
 const RootLayout = lazy(() => import("@/layouts/RootLayout"));
 
@@ -36,6 +37,7 @@ function MainRoutes() {
         <Route element={<RootLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/barbershops" element={<Barbershops />} />
+          <Route path="/plans" element={<Plans />} />
         </Route>
       </Route>
 

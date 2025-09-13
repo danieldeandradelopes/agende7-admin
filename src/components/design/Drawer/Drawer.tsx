@@ -4,7 +4,7 @@ import React from "react";
 
 interface IDrawer {
   title: string;
-  placement: DrawerProps["placement"];
+  placement?: DrawerProps["placement"];
   onClose: () => void;
   open: boolean;
   btnCancelText?: string;
@@ -14,7 +14,7 @@ interface IDrawer {
 
 const Drawer: React.FC<IDrawer> = ({
   title,
-  placement,
+  placement = "right",
   onClose,
   open,
   btnCancelText = "Cancelar",

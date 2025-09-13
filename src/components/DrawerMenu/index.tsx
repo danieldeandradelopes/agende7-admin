@@ -49,6 +49,12 @@ function DrawerMenu() {
       onClick: () => handleNavigate("/barbershops"),
     },
     {
+      key: "plans",
+      icon: <HomeOutlined />,
+      label: "Planos",
+      onClick: () => handleNavigate("/plans"),
+    },
+    {
       key: "profile",
       icon: <UserOutlined />,
       label: "Perfil",

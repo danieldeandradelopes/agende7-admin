@@ -1,10 +1,10 @@
 import { useBrandingContext } from "@/context/branding";
 
+import SideNavBar from "@/components/design/SideNavBar";
 import { MoonOutlined, MoreOutlined, SunOutlined } from "@ant-design/icons";
 import { FloatButton } from "antd";
 import { Outlet } from "react-router-dom";
 import s from "./root.module.scss";
-import DrawerMenu from "@/components/DrawerMenu";
 
 function RooLayout() {
   const { theme, setTheme } = useBrandingContext();
@@ -15,8 +15,8 @@ function RooLayout() {
 
   return (
     <div className={s.container}>
-      <DrawerMenu />
       <div className={s.content}>
+        <SideNavBar />
         <Outlet />
       </div>
 

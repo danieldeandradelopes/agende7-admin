@@ -3,6 +3,9 @@ import HeaderPage from "@/components/HeaderPage";
 import Table from "@/components/design/Table/Table";
 import { useGetBarbershops } from "@/hooks/integration/barbershops/queries";
 import s from "./styles.module.scss";
+import useDisclosure from "@/hooks/utils/use-disclosure";
+import Drawer from "@/components/design/Drawer/Drawer";
+import classNames from "classnames";
 
 const columns = [
   {
@@ -27,7 +30,7 @@ const columns = [
     title: "Pagamento",
     dataIndex: "status_payment",
     key: "status_payment",
-    render: (value: string) => {
+    render: (value: string | undefined) => {
       return <span>{value ?? "N/A"}</span>;
     },
   },
@@ -58,11 +61,30 @@ const columns = [
 
 function Barbershops() {
   const { data } = useGetBarbershops();
+  const { handleClose, handleOpen, open } = useDisclosure();
 
   return (
     <div className={s.container}>
-      <HeaderPage title="Barbearias" />
+      <HeaderPage title="Barbearias">
+        <button
+          className={classNames("btn btn--primary", s.btn)}
+          onClick={handleOpen}
+        >
+          Novo
+        </button>
+      </HeaderPage>
       <Table<BarberShop> columns={columns} data={data ?? []} />
+
+      <Drawer
+        btnConfirmText="Cadastrar"
+        onClose={handleClose}
+        open={open}
+        title="Adicionar barbearia"
+      >
+        <form>
+          <h1>Nova barbearia</h1>
+        </form>
+      </Drawer>
     </div>
   );
 }
