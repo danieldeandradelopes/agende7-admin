@@ -39,11 +39,10 @@ function Main() {
               <AppWithUpdater />
               <MainRoutes />
               <ToastContainer
-                position="bottom-center"
+                position="top-right"
                 closeButton={false}
                 autoClose={2000}
                 theme={theme === "dark" ? "dark" : "light"}
-                style={{ bottom: "16px", margin: "0 16px", width: "90vw" }}
               />
               <Analytics />
             </BrowserRouter>
