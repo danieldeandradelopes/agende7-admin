@@ -36,7 +36,7 @@ function MainRoutes() {
       <Route element={<PrivateRoutes />}>
         <Route element={<RootLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/barbershops" element={<Barbershops />} />
+          <Route path="/barbershop" element={<Barbershops />} />
           <Route path="/plans" element={<Plans />} />
         </Route>
       </Route>

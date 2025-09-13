@@ -1,6 +1,7 @@
 import type { DrawerProps } from "antd";
 import { Drawer as AntdDrawer, Button, Space } from "antd";
 import React from "react";
+import s from "./drawer.module.scss";
 
 interface IDrawer {
   title: string;
@@ -10,6 +11,7 @@ interface IDrawer {
   btnCancelText?: string;
   btnConfirmText: string;
   children: React.ReactNode;
+  onConfirm: () => void;
 }
 
 const Drawer: React.FC<IDrawer> = ({
@@ -19,6 +21,7 @@ const Drawer: React.FC<IDrawer> = ({
   open,
   btnCancelText = "Cancelar",
   btnConfirmText = "Confirmar",
+  onConfirm,
   children,
 }) => {
   return (
@@ -28,10 +31,11 @@ const Drawer: React.FC<IDrawer> = ({
       width={500}
       onClose={onClose}
       open={open}
-      extra={
+      className={s.container}
+      footer={
         <Space>
           <Button onClick={onClose}>{btnCancelText}</Button>
-          <Button type="primary" onClick={onClose}>
+          <Button type="primary" onClick={onConfirm}>
             {btnConfirmText}
           </Button>
         </Space>

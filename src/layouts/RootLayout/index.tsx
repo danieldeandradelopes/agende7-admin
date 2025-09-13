@@ -17,7 +17,9 @@ function RooLayout() {
     <div className={s.container}>
       <div className={s.content}>
         <SideNavBar />
-        <Outlet />
+        <div className={s.children}>
+          <Outlet />
+        </div>
       </div>
 
       <FloatButton.Group

@@ -1,14 +1,41 @@
 .container {
-  background-color: var(--color-background);
+  .avatar {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .btn {
+    width: 200px;
+  }
 }
 
-.avatar {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  border-radius: 50%;
+.actions {
+  display: flex;
+  gap: 8px;
+
+  svg {
+    font-size: 16px;
+    color: var(--color-primary);
+    cursor: pointer;
+  }
+
+  svg:hover {
+    color: var(--color-secondary);
+  }
 }
 
-.btn {
-  width: 200px;
+.form {
+  fieldset {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+
+    .auto_approve {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
 }
