@@ -2,6 +2,8 @@ import { CreateBarberShopWithTemplate } from "@/@backend-types/BarberShop";
 import HeaderPage from "@/components/HeaderPage";
 import Wrapper from "@/components/Wrapper";
 import Drawer from "@/components/design/Drawer/Drawer";
+import Option from "@/components/design/Option";
+import Select from "@/components/design/Select";
 import Table from "@/components/design/Table/Table";
 import { useCreateBarberShop } from "@/hooks/integration/barbershops/mutations";
 import { useGetBarbershops } from "@/hooks/integration/barbershops/queries";
@@ -38,7 +40,8 @@ function Barbershops() {
   });
 
   async function handleSubmit(formData: CreateBarberShopWithTemplate) {
-    await barberShopMutateAsync(formData);
+    console.log(formData);
+    // await barberShopMutateAsync(formData);
     handleClose();
   }
 
@@ -61,7 +64,7 @@ function Barbershops() {
         open={open}
         title="Adicionar barbearia"
       >
-        <FormProvider form={form} className={s.form} onSubmit={() => {}}>
+        <FormProvider form={form} className={s.form} onSubmit={handleSubmit}>
           <Controller
             name="name"
             control={form.control}
@@ -70,6 +73,7 @@ function Barbershops() {
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="name"
+                label="Nome:"
               >
                 <input
                   name="name"
@@ -90,6 +94,7 @@ function Barbershops() {
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="address"
+                label="Endereço:"
               >
                 <input
                   name="address"
@@ -110,6 +115,7 @@ function Barbershops() {
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="email"
+                label="E-mail:"
               >
                 <input
                   name="email"
@@ -123,6 +129,28 @@ function Barbershops() {
           />
 
           <Controller
+            name="documentType"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Wrapper<CreateBarberShopWithTemplate>
+                errorMessage={fieldState.error?.message}
+                error={Boolean(fieldState.error)}
+                name="documentType"
+                label="Tipo de documento:"
+              >
+                <Select
+                  placeholder="Selecione o tipo de documento"
+                  onChange={(event) => field.onChange(event)}
+                  value={field.value}
+                >
+                  <Option value="cpf">CPF</Option>
+                  <Option value="cnpj">CNPJ</Option>
+                </Select>
+              </Wrapper>
+            )}
+          />
+
+          <Controller
             name="document"
             control={form.control}
             render={({ field, fieldState }) => (
@@ -130,6 +158,7 @@ function Barbershops() {
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="document"
+                label="Documento: "
               >
                 <input
                   name="document"
@@ -143,29 +172,6 @@ function Barbershops() {
           />
 
           <Controller
-            name="features"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Wrapper<CreateBarberShopWithTemplate>
-                errorMessage={fieldState.error?.message}
-                error={Boolean(fieldState.error)}
-                name="features"
-              >
-                <div className={s.auto_approve}>
-                  <input
-                    name="auto_approve"
-                    type="checkbox"
-                    placeholder="Auto aprove"
-                    value={field.value}
-                    onChange={(value) => field.onChange(value)}
-                  />
-                  <label htmlFor="auto_approve">Auto aprove</label>
-                </div>
-              </Wrapper>
-            )}
-          />
-
-          <Controller
             name="phone"
             control={form.control}
             render={({ field, fieldState }) => (
@@ -173,6 +179,7 @@ function Barbershops() {
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="phone"
+                label="Telefone:"
               >
                 <input
                   name="phone"
@@ -192,31 +199,12 @@ function Barbershops() {
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="subdomain"
+                label="Subdomínio:"
               >
                 <input
                   name="subdomain"
                   type="text"
                   placeholder="Subdomínio"
-                  value={field.value}
-                  onChange={(value) => field.onChange(value)}
-                />
-              </Wrapper>
-            )}
-          />
-
-          <Controller
-            name="documentType"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Wrapper<CreateBarberShopWithTemplate>
-                errorMessage={fieldState.error?.message}
-                error={Boolean(fieldState.error)}
-                name="documentType"
-              >
-                <input
-                  name="documentType"
-                  type="text"
-                  placeholder="Tipo de documento"
                   value={field.value}
                   onChange={(value) => field.onChange(value)}
                 />
@@ -232,6 +220,7 @@ function Barbershops() {
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="cover"
+                label="Logo:"
               >
                 <input
                   name="cover"
@@ -252,6 +241,7 @@ function Barbershops() {
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="description"
+                label="Descrição:"
               >
                 <input
                   name="description"
@@ -272,13 +262,19 @@ function Barbershops() {
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="latitude"
+                label="Latitude:"
               >
                 <input
                   name="latitude"
-                  type="text"
+                  type="number"
                   placeholder="Latitude"
-                  value={field.value}
-                  onChange={(value) => field.onChange(value)}
+                  value={field.value ?? ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    field.onChange(
+                      value === "" ? undefined : parseFloat(value)
+                    );
+                  }}
                 />
               </Wrapper>
             )}
@@ -291,14 +287,43 @@ function Barbershops() {
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="longitude"
+                label="Longitude:"
               >
                 <input
                   name="longitude"
-                  type="text"
+                  type="number"
                   placeholder="Longitude"
-                  value={field.value}
-                  onChange={(value) => field.onChange(value)}
+                  value={field.value ?? ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    field.onChange(
+                      value === "" ? undefined : parseFloat(value)
+                    );
+                  }}
                 />
+              </Wrapper>
+            )}
+          />
+
+          <Controller
+            name="features"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Wrapper<CreateBarberShopWithTemplate>
+                errorMessage={fieldState.error?.message}
+                error={Boolean(fieldState.error)}
+                name="features"
+                label="Funcionalidades:"
+              >
+                <Select
+                  placeholder="Funcionalides"
+                  onChange={(event) => field.onChange(event)}
+                  value={field.value}
+                  mode="multiple"
+                >
+                  <Option value="autoApprove">Aprovação automática</Option>
+                  <Option value="dashboard">Acesso ao dashboard</Option>
+                </Select>
               </Wrapper>
             )}
           />

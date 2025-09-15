@@ -37,10 +37,13 @@
     }
   }
 
+  [class="ant-select-selection-wrap"] {
+    align-self: normal;
+  }
+
   [class="ant-select-selector"] {
     background-color: var(--input-bg) !important;
     color: var(--input-text) !important;
-    border: none !important;
     font-size: 1.6rem !important;
   }
 }
