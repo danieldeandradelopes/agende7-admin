@@ -1,4 +1,4 @@
-import BarberShop from "@/@backend-types/BarberShop";
+import { CreateBarberShopWithTemplate } from "@/@backend-types/BarberShop";
 import HeaderPage from "@/components/HeaderPage";
 import Wrapper from "@/components/Wrapper";
 import Drawer from "@/components/design/Drawer/Drawer";
@@ -8,107 +8,36 @@ import { useGetBarbershops } from "@/hooks/integration/barbershops/queries";
 import useDisclosure from "@/hooks/utils/use-disclosure";
 import { FormProvider } from "@/libs/form/FormProvider";
 import { useZodForm } from "@/libs/form/useZodForm";
-import { ColumnType } from "antd/es/table";
 import classNames from "classnames";
 import { Controller } from "react-hook-form";
-import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
-import { barberShopSchema } from "./schema";
+import { createBarberShopWithTemplateSchema } from "./schema";
 import s from "./styles.module.scss";
-
-const columns: ColumnType[] = [
-  {
-    title: "Avatar",
-    dataIndex: "cover",
-    key: "cover",
-    render: (value: string) => {
-      return <img src={value} alt="cover" className={s.avatar} />;
-    },
-  },
-  {
-    title: "Nome",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Endereço",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Pagamento",
-    dataIndex: "status_payment",
-    key: "status_payment",
-    render: (value: string | undefined) => {
-      return <span>{value ?? "N/A"}</span>;
-    },
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    key: "email",
-  },
-  {
-    title: "Documento",
-    dataIndex: "document",
-    key: "document",
-  },
-  {
-    title: "Aprov. Autom.",
-    dataIndex: "auto_approve",
-    key: "auto_approve",
-    render: (value: string | undefined) => {
-      return <span>{value ? "Sim" : "Não"}</span>;
-    },
-  },
-  {
-    title: "Subdomínio",
-    dataIndex: "subdomain",
-    key: "subdomain",
-  },
-  {
-    title: "Ações",
-    dataIndex: "actions",
-    key: "actions",
-    render: () => {
-      return (
-        <div className={s.actions}>
-          <FaRegTrashAlt />
-          <FaEdit />
-        </div>
-      );
-    },
-  },
-];
+import { columns } from "./types";
 
 function Barbershops() {
   const { data } = useGetBarbershops();
   const { handleClose, handleOpen, open } = useDisclosure();
   const { mutateAsync: barberShopMutateAsync } = useCreateBarberShop();
   const form = useZodForm({
-    schema: barberShopSchema,
+    schema: createBarberShopWithTemplateSchema,
     mode: "onSubmit",
     defaultValues: {
       email: "",
       name: "",
       address: "",
       document: "",
-      auto_approve: false,
-      status_payment: "",
-      social_medias: "",
-      phones: "",
-      branding: "",
-      latitude: "",
-      longitude: "",
+      features: [],
+      phone: "",
+      latitude: 0,
+      longitude: 0,
       subdomain: "",
-      timezone: "",
-      document_type: "",
+      documentType: "cpf",
       cover: "",
       description: "",
     },
   });
 
-  async function handleSubmit(formData: BarberShop) {
-    console.log(formData);
+  async function handleSubmit(formData: CreateBarberShopWithTemplate) {
     await barberShopMutateAsync(formData);
     handleClose();
   }
@@ -137,7 +66,7 @@ function Barbershops() {
             name="name"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
+              <Wrapper<CreateBarberShopWithTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="name"
@@ -157,7 +86,7 @@ function Barbershops() {
             name="address"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
+              <Wrapper<CreateBarberShopWithTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="address"
@@ -177,7 +106,7 @@ function Barbershops() {
             name="email"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
+              <Wrapper<CreateBarberShopWithTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="email"
@@ -197,7 +126,7 @@ function Barbershops() {
             name="document"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
+              <Wrapper<CreateBarberShopWithTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="document"
@@ -214,13 +143,13 @@ function Barbershops() {
           />
 
           <Controller
-            name="auto_approve"
+            name="features"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
+              <Wrapper<CreateBarberShopWithTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
-                name="auto_approve"
+                name="features"
               >
                 <div className={s.auto_approve}>
                   <input
@@ -235,55 +164,18 @@ function Barbershops() {
               </Wrapper>
             )}
           />
+
           <Controller
-            name="status_payment"
+            name="phone"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
+              <Wrapper<CreateBarberShopWithTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
-                name="status_payment"
+                name="phone"
               >
                 <input
-                  name="status_payment"
-                  type="text"
-                  placeholder="Status de pagamento"
-                  value={field.value}
-                  onChange={(value) => field.onChange(value)}
-                />
-              </Wrapper>
-            )}
-          />
-          <Controller
-            name="social_medias"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
-                errorMessage={fieldState.error?.message}
-                error={Boolean(fieldState.error)}
-                name="social_medias"
-              >
-                <input
-                  name="social_medias"
-                  type="text"
-                  placeholder="Médias sociais"
-                  value={field.value}
-                  onChange={(value) => field.onChange(value)}
-                />
-              </Wrapper>
-            )}
-          />
-          <Controller
-            name="phones"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
-                errorMessage={fieldState.error?.message}
-                error={Boolean(fieldState.error)}
-                name="phones"
-              >
-                <input
-                  name="phones"
+                  name="phone"
                   type="text"
                   placeholder="Telefones"
                   value={field.value}
@@ -296,7 +188,7 @@ function Barbershops() {
             name="subdomain"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
+              <Wrapper<CreateBarberShopWithTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="subdomain"
@@ -311,36 +203,18 @@ function Barbershops() {
               </Wrapper>
             )}
           />
+
           <Controller
-            name="timezone"
+            name="documentType"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
+              <Wrapper<CreateBarberShopWithTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
-                name="timezone"
+                name="documentType"
               >
                 <input
-                  name="timezone"
-                  type="text"
-                  placeholder="Timezone"
-                  value={field.value}
-                  onChange={(value) => field.onChange(value)}
-                />
-              </Wrapper>
-            )}
-          />
-          <Controller
-            name="document_type"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
-                errorMessage={fieldState.error?.message}
-                error={Boolean(fieldState.error)}
-                name="document_type"
-              >
-                <input
-                  name="document_type"
+                  name="documentType"
                   type="text"
                   placeholder="Tipo de documento"
                   value={field.value}
@@ -354,7 +228,7 @@ function Barbershops() {
             name="cover"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
+              <Wrapper<CreateBarberShopWithTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="cover"
@@ -374,7 +248,7 @@ function Barbershops() {
             name="description"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
+              <Wrapper<CreateBarberShopWithTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="description"
@@ -394,7 +268,7 @@ function Barbershops() {
             name="latitude"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
+              <Wrapper<CreateBarberShopWithTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="latitude"
@@ -413,7 +287,7 @@ function Barbershops() {
             name="longitude"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
+              <Wrapper<CreateBarberShopWithTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="longitude"
@@ -422,25 +296,6 @@ function Barbershops() {
                   name="longitude"
                   type="text"
                   placeholder="Longitude"
-                  value={field.value}
-                  onChange={(value) => field.onChange(value)}
-                />
-              </Wrapper>
-            )}
-          />
-          <Controller
-            name="branding"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Wrapper<BarberShop>
-                errorMessage={fieldState.error?.message}
-                error={Boolean(fieldState.error)}
-                name="branding"
-              >
-                <input
-                  name="branding"
-                  type="text"
-                  placeholder="Branding"
                   value={field.value}
                   onChange={(value) => field.onChange(value)}
                 />
