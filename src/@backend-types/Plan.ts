@@ -1,9 +1,20 @@
+import PlanPrice from "./PlanPrice";
+
 export interface PlanProps {
   id?: number;
   name: string;
   description?: string;
   features?: any;
   created_at?: string;
+}
+
+export interface PlanResponse {
+  id: number;
+  name: string;
+  description: string;
+  features: any;
+  created_at: string;
+  plan_price: PlanPrice[];
 }
 
 export default class Plan {
