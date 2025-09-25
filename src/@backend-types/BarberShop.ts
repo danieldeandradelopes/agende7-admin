@@ -2,26 +2,22 @@ import Branding from "./Branding";
 import Phone from "./Phone";
 import SocialMedia from "./SocialMedia";
 
-export interface Feature {
-  name: "autoApprove";
-}
-
-export interface CreateBarberShopWithTemplate {
+export interface BarberShopWithDefaultTemplate {
   name: string;
   address: string;
   cover: string;
+  phone: string;
   description: string;
   subdomain: string;
   latitude: number;
   longitude: number;
-  features: Feature[];
-  phone: string;
   email: string;
   document: string;
-  documentType: "cpf" | "cnpj";
+  document_type: string;
+  features: string[];
 }
 
-interface BarberShopProps {
+export interface BarberShopProps {
   id: number;
   name: string;
   cover: string;

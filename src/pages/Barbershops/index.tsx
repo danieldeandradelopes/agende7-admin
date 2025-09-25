@@ -1,11 +1,12 @@
-import { CreateBarberShopWithTemplate } from "@/@backend-types/BarberShop";
+import BarberShop, {
+  BarberShopWithDefaultTemplate,
+} from "@/@backend-types/BarberShop";
 import HeaderPage from "@/components/HeaderPage";
 import Wrapper from "@/components/Wrapper";
 import Drawer from "@/components/design/Drawer/Drawer";
 import Option from "@/components/design/Option";
 import Select from "@/components/design/Select";
-import Table from "@/components/design/Table/Table";
-import { useCreateBarberShop } from "@/hooks/integration/barbershops/mutations";
+import Table, { ColumnType } from "@/components/design/Table/Table";
 import { useGetBarbershops } from "@/hooks/integration/barbershops/queries";
 import useDisclosure from "@/hooks/utils/use-disclosure";
 import { FormProvider } from "@/libs/form/FormProvider";
@@ -19,7 +20,7 @@ import { columns } from "./types";
 function Barbershops() {
   const { data } = useGetBarbershops();
   const { handleClose, handleOpen, open } = useDisclosure();
-  const { mutateAsync: barberShopMutateAsync } = useCreateBarberShop();
+
   const form = useZodForm({
     schema: createBarberShopWithTemplateSchema,
     mode: "onSubmit",
@@ -33,13 +34,13 @@ function Barbershops() {
       latitude: 0,
       longitude: 0,
       subdomain: "",
-      documentType: "cpf",
+      document_type: "cpf",
       cover: "",
       description: "",
     },
   });
 
-  async function handleSubmit(formData: CreateBarberShopWithTemplate) {
+  async function handleSubmit(formData: BarberShopWithDefaultTemplate) {
     console.log(formData);
     // await barberShopMutateAsync(formData);
     handleClose();
@@ -55,7 +56,10 @@ function Barbershops() {
           Novo
         </button>
       </HeaderPage>
-      <Table columns={columns} data={data ?? []} />
+      <Table<BarberShop>
+        columns={columns as ColumnType<BarberShop>[]}
+        data={data ?? []}
+      />
 
       <Drawer
         btnConfirmText="Cadastrar"
@@ -69,7 +73,7 @@ function Barbershops() {
             name="name"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<CreateBarberShopWithTemplate>
+              <Wrapper<BarberShopWithDefaultTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="name"
@@ -90,7 +94,7 @@ function Barbershops() {
             name="address"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<CreateBarberShopWithTemplate>
+              <Wrapper<BarberShopWithDefaultTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="address"
@@ -111,7 +115,7 @@ function Barbershops() {
             name="email"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<CreateBarberShopWithTemplate>
+              <Wrapper<BarberShopWithDefaultTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="email"
@@ -129,13 +133,13 @@ function Barbershops() {
           />
 
           <Controller
-            name="documentType"
+            name="document_type"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<CreateBarberShopWithTemplate>
+              <Wrapper<BarberShopWithDefaultTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
-                name="documentType"
+                name="document_type"
                 label="Tipo de documento:"
               >
                 <Select
@@ -154,7 +158,7 @@ function Barbershops() {
             name="document"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<CreateBarberShopWithTemplate>
+              <Wrapper<BarberShopWithDefaultTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="document"
@@ -175,7 +179,7 @@ function Barbershops() {
             name="phone"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<CreateBarberShopWithTemplate>
+              <Wrapper<BarberShopWithDefaultTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="phone"
@@ -195,7 +199,7 @@ function Barbershops() {
             name="subdomain"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<CreateBarberShopWithTemplate>
+              <Wrapper<BarberShopWithDefaultTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="subdomain"
@@ -216,7 +220,7 @@ function Barbershops() {
             name="cover"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<CreateBarberShopWithTemplate>
+              <Wrapper<BarberShopWithDefaultTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="cover"
@@ -237,7 +241,7 @@ function Barbershops() {
             name="description"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<CreateBarberShopWithTemplate>
+              <Wrapper<BarberShopWithDefaultTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="description"
@@ -258,7 +262,7 @@ function Barbershops() {
             name="latitude"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<CreateBarberShopWithTemplate>
+              <Wrapper<BarberShopWithDefaultTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="latitude"
@@ -283,7 +287,7 @@ function Barbershops() {
             name="longitude"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<CreateBarberShopWithTemplate>
+              <Wrapper<BarberShopWithDefaultTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="longitude"
@@ -309,7 +313,7 @@ function Barbershops() {
             name="features"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Wrapper<CreateBarberShopWithTemplate>
+              <Wrapper<BarberShopWithDefaultTemplate>
                 errorMessage={fieldState.error?.message}
                 error={Boolean(fieldState.error)}
                 name="features"

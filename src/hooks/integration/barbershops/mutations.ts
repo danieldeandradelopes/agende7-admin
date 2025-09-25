@@ -1,4 +1,4 @@
-import { CreateBarberShopWithTemplate } from "@/@backend-types/BarberShop";
+import { BarberShopWithDefaultTemplate } from "@/@backend-types/BarberShop";
 import { useAuth } from "@/hooks/utils/use-auth";
 import { api } from "@/services/api";
 import showNotification from "@/utils/notify";
@@ -8,7 +8,7 @@ import { BARBERSHOPS_KEYS } from "./keys";
 export const useCreateBarberShop = () => {
   const { getToken } = useAuth();
 
-  return useMutation<void, Error, CreateBarberShopWithTemplate>({
+  return useMutation<void, Error, BarberShopWithDefaultTemplate>({
     mutationFn: async (data) => {
       await api.post<void>({
         url: "/barber-shop",

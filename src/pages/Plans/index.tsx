@@ -41,6 +41,7 @@ function Plans() {
         onClose={handleClose}
         open={open}
         title="Adicionar barbearia"
+        onConfirm={() => {}}
       >
         <form>
           <h1>Nova barbearia</h1>

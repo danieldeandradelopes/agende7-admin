@@ -1,4 +1,3 @@
-import { StatusEnum } from "@/pages/Store/BarberSchedule/components/ScheduleService/type";
 import classNames from "classnames";
 import s from "./status-tag.module.scss";
 import { StatusType } from "@/@backend-types/StatusType";
@@ -20,9 +19,7 @@ function StatusTag({ status }: StatusTagProps) {
         [s.doneStatus]: isDone,
       })}
     >
-      <span className={s.statusText}>
-        {StatusEnum[status as keyof typeof StatusEnum]}
-      </span>
+      <span className={s.statusText}>{status}</span>
     </div>
   );
 }

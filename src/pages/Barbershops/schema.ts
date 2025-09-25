@@ -19,7 +19,7 @@ export const createBarberShopWithTemplateSchema = z.object({
     .min(1, "Email é obrigatório")
     .email({ message: "O campo email deve ser um email válido" }),
   document: z.string().min(1, "Documento é obrigatório"),
-  documentType: z.enum(["cpf", "cnpj"], {
+  document_type: z.enum(["cpf", "cnpj"], {
     required_error: "Tipo de documento é obrigatório",
   }),
 });

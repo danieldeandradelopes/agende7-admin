@@ -7,6 +7,7 @@ export interface ServiceProps {
   barber_shop_id: number;
   updated_at?: string;
   created_at?: string;
+  is_deleted?: boolean;
 }
 
 export default class Service {
@@ -18,7 +19,7 @@ export default class Service {
   readonly duration: number;
   readonly updated_at?: string;
   readonly created_at?: string;
-
+  readonly is_deleted?: boolean;
   constructor({
     id,
     title,
@@ -28,6 +29,7 @@ export default class Service {
     updated_at,
     barber_shop_id,
     created_at,
+    is_deleted,
   }: ServiceProps) {
     this.id = id;
     this.title = title;
@@ -37,5 +39,6 @@ export default class Service {
     this.updated_at = updated_at;
     this.created_at = created_at;
     this.barber_shop_id = barber_shop_id;
+    this.is_deleted = is_deleted;
   }
 }
