@@ -11,7 +11,7 @@ export const useGetReportsDashboard = () => {
     queryKey: [REPORTS_KEYS.useGetReportsDashboard],
     queryFn: async () => {
       const response = await api.get<DashboardReports>({
-        url: "/reports-dashboard",
+        url: "/dashboard-reports",
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },
