@@ -35,7 +35,7 @@ function Dashboard() {
         <div className={s.line}>
           <Card>
             <Statistic
-              title="Hoje"
+              title="Comparação ontem com hoje"
               value={reportsDashboard?.schedules.today}
               valueStyle={{
                 color: getColor(
@@ -49,7 +49,7 @@ function Dashboard() {
           </Card>
           <Card>
             <Statistic
-              title="Mês"
+              title="Comparação mês passado com o atual"
               value={reportsDashboard?.schedules.this_month}
               valueStyle={{
                 color: getColor(
@@ -66,7 +66,7 @@ function Dashboard() {
 
           <Card>
             <Statistic
-              title="Ano"
+              title="Comparação ano passado com o atual"
               value={reportsDashboard?.schedules.this_year}
               valueStyle={{
                 color: getColor(
@@ -89,7 +89,7 @@ function Dashboard() {
         <div className={s.line}>
           <Card>
             <Statistic
-              title="Hoje"
+              title="Comparação ontem com hoje"
               value={reportsDashboard?.new_users.today}
               valueStyle={{
                 color: getColor(
@@ -104,7 +104,7 @@ function Dashboard() {
 
           <Card>
             <Statistic
-              title="Mês"
+              title="Comparação mês passado com o atual"
               value={reportsDashboard?.new_users.this_month}
               valueStyle={{
                 color: getColor(
@@ -121,7 +121,7 @@ function Dashboard() {
 
           <Card>
             <Statistic
-              title="Ano"
+              title="Comparação ano passado com o atual"
               value={reportsDashboard?.new_users.this_year}
               valueStyle={{
                 color: getColor(
