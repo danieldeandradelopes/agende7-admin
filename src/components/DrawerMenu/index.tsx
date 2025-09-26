@@ -37,16 +37,16 @@ function DrawerMenu() {
 
   const defaultMenuItems = [
     {
-      key: "home",
+      key: "dashboard",
       icon: <HomeOutlined />,
-      label: "Home",
+      label: "Dashboard",
       onClick: () => handleNavigate("/dashboard"),
     },
     {
-      key: "barbershops",
+      key: "barbershop",
       icon: <HomeOutlined />,
       label: "Barbearias",
-      onClick: () => handleNavigate("/barbershops"),
+      onClick: () => handleNavigate("/barbershop"),
     },
     {
       key: "plans",
@@ -55,10 +55,10 @@ function DrawerMenu() {
       onClick: () => handleNavigate("/plans"),
     },
     {
-      key: "profile",
+      key: "users",
       icon: <UserOutlined />,
-      label: "Perfil",
-      onClick: () => handleNavigate("/profile"),
+      label: "Usuários",
+      onClick: () => handleNavigate("/users"),
     },
   ];
 
