@@ -7,12 +7,14 @@ import Drawer from "@/components/design/Drawer/Drawer";
 import Option from "@/components/design/Option";
 import Select from "@/components/design/Select";
 import Table, { ColumnType } from "@/components/design/Table/Table";
+import { useCreateBarberShop } from "@/hooks/integration/barbershops/mutations";
 import { useGetBarbershops } from "@/hooks/integration/barbershops/queries";
 import useDisclosure from "@/hooks/utils/use-disclosure";
 import { FormProvider } from "@/libs/form/FormProvider";
 import { useZodForm } from "@/libs/form/useZodForm";
 import classNames from "classnames";
 import { Controller } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { createBarberShopWithTemplateSchema } from "./schema";
 import s from "./styles.module.scss";
 import { columns } from "./types";
@@ -20,6 +22,8 @@ import { columns } from "./types";
 function Barbershops() {
   const { data } = useGetBarbershops();
   const { handleClose, handleOpen, open } = useDisclosure();
+  const { mutateAsync: barberShopMutateAsync } = useCreateBarberShop();
+  const navigate = useNavigate();
 
   const form = useZodForm({
     schema: createBarberShopWithTemplateSchema,
@@ -29,7 +33,6 @@ function Barbershops() {
       name: "",
       address: "",
       document: "",
-      features: [],
       phone: "",
       latitude: 0,
       longitude: 0,
@@ -41,24 +44,30 @@ function Barbershops() {
   });
 
   async function handleSubmit(formData: BarberShopWithDefaultTemplate) {
-    console.log(formData);
-    // await barberShopMutateAsync(formData);
+    await barberShopMutateAsync(formData);
+    form.reset();
     handleClose();
   }
 
+  const handleRowClick = (record: BarberShop) => {
+    navigate(`/barbershop/${record.id}`);
+  };
+
   return (
     <div className={s.container}>
-      <HeaderPage title="Barbearias">
-        <button
-          className={classNames("btn btn--primary", s.btn)}
-          onClick={handleOpen}
-        >
-          Novo
-        </button>
-      </HeaderPage>
+      <HeaderPage title="Barbearias" className={s.header} />
+
+      <button
+        className={classNames("btn btn--primary", s.btn)}
+        onClick={handleOpen}
+      >
+        Novo
+      </button>
+
       <Table<BarberShop>
         columns={columns as ColumnType<BarberShop>[]}
         data={data ?? []}
+        onRowClick={handleRowClick}
       />
 
       <Drawer
@@ -305,29 +314,6 @@ function Barbershops() {
                     );
                   }}
                 />
-              </Wrapper>
-            )}
-          />
-
-          <Controller
-            name="features"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Wrapper<BarberShopWithDefaultTemplate>
-                errorMessage={fieldState.error?.message}
-                error={Boolean(fieldState.error)}
-                name="features"
-                label="Funcionalidades:"
-              >
-                <Select
-                  placeholder="Funcionalides"
-                  onChange={(event) => field.onChange(event)}
-                  value={field.value}
-                  mode="multiple"
-                >
-                  <Option value="autoApprove">Aprovação automática</Option>
-                  <Option value="dashboard">Acesso ao dashboard</Option>
-                </Select>
               </Wrapper>
             )}
           />

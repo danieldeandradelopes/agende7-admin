@@ -13,10 +13,15 @@ export interface ColumnType<T> {
 interface ITableProps<T> {
   columns: ColumnType<T>[];
   data: T[];
+  onRowClick?: (record: T) => void;
 }
 
 // Componente Table genérico
-function Table<T extends object>({ columns, data }: ITableProps<T>) {
+function Table<T extends object>({
+  columns,
+  data,
+  onRowClick,
+}: ITableProps<T>) {
   // Adaptar as colunas para o formato do AntdTable
   const antdColumns = columns.map((col) => ({
     title: col.title,
@@ -32,6 +37,9 @@ function Table<T extends object>({ columns, data }: ITableProps<T>) {
       columns={antdColumns}
       dataSource={data}
       rowKey={columns[0]?.dataIndex as string}
+      onRow={(record) => ({
+        onClick: () => onRowClick?.(record),
+      })}
     />
   );
 }

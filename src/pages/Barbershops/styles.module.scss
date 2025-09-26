@@ -11,6 +11,9 @@
 
   .btn {
     width: 200px;
+    margin-bottom: 16px;
+
+    align-self: flex-end;
 
     @media (max-width: 768px) {
       width: 100%;

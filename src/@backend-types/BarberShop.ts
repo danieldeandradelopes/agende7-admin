@@ -4,17 +4,16 @@ import SocialMedia from "./SocialMedia";
 
 export interface BarberShopWithDefaultTemplate {
   name: string;
-  address: string;
   cover: string;
+  address: string;
   phone: string;
   description: string;
   subdomain: string;
   latitude: number;
   longitude: number;
-  email: string;
   document: string;
   document_type: string;
-  features: string[];
+  email: string;
 }
 
 export interface BarberShopProps {
@@ -46,7 +45,6 @@ export default class BarberShop {
   readonly address: string;
   readonly description: string;
   readonly auto_approve: string;
-  readonly status_payment?: string;
   readonly social_medias?: SocialMedia[];
   readonly phones?: Phone[];
   readonly branding?: Branding[];
@@ -66,7 +64,6 @@ export default class BarberShop {
     cover,
     address,
     description,
-    status_payment,
     social_medias,
     auto_approve,
     phones,
@@ -86,7 +83,6 @@ export default class BarberShop {
     this.cover = cover;
     this.address = address;
     this.description = description;
-    this.status_payment = status_payment;
     this.social_medias = social_medias;
     this.phones = phones;
     this.branding = branding;

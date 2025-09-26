@@ -1,6 +1,6 @@
 import s from "./header-page.module.scss";
 
-interface IHeaderPageProps {
+interface IHeaderPageProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   children?: React.ReactNode;
 }

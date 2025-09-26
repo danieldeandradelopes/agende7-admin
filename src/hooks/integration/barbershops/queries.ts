@@ -27,3 +27,23 @@ export const useGetBarbershops = () => {
     enabled: !!getToken(),
   });
 };
+
+export const useGetBarbershopById = (id: number) => {
+  const { getToken } = useAuth();
+
+  return useQuery<BarberShop, Error, BarberShop>({
+    queryKey: [BARBERSHOPS_KEYS.useGetBarbershopById, id],
+    queryFn: async () => {
+      const response = await api.get<BarberShop>({
+        url: `/barber-shop/${id}`,
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      });
+
+      return response;
+    },
+    retry: false,
+    enabled: !!getToken() && !!id,
+  });
+};
