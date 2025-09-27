@@ -421,7 +421,7 @@ function BarberShopDetail() {
         description: barbershop.description || "",
         latitude: barbershop.latitude || "",
         longitude: barbershop.longitude || "",
-        auto_approve: barbershop.auto_approve === "true" ? "true" : "false",
+        auto_approve: barbershop.auto_approve ? "true" : "false",
         timezone: barbershop.timezone || "",
       });
     }
@@ -461,7 +461,7 @@ function BarberShopDetail() {
         description: barbershop.description || "",
         latitude: barbershop.latitude || 0,
         longitude: barbershop.longitude || 0,
-        auto_approve: barbershop.auto_approve === "true" ? "true" : "false",
+        auto_approve: barbershop.auto_approve ? "true" : "false",
         timezone: barbershop.timezone || "",
       });
     }
