@@ -497,7 +497,7 @@ function BarberShopDetail() {
   return (
     <div className={s.container}>
       <HeaderPage
-        title={`Detalhes da Barbearia: ${barbershop.name}`}
+        title={`Visualizando: ${barbershop.name}`}
         className={s.header}
       />
       <div className={s.actions}>
