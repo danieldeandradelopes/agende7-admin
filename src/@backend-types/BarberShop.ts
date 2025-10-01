@@ -14,6 +14,7 @@ export interface BarberShopWithDefaultTemplate {
   document: string;
   document_type: string;
   email: string;
+  plan_price_id: number;
 }
 
 export interface BarberShopProps {
@@ -22,7 +23,6 @@ export interface BarberShopProps {
   cover: string;
   address: string;
   description: string;
-  status_payment?: string;
   social_medias?: SocialMedia[];
   phones?: Phone[];
   branding?: Branding[];

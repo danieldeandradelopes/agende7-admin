@@ -21,4 +21,5 @@ export const createBarberShopWithTemplateSchema = z.object({
   document_type: z.enum(["cpf", "cnpj"], {
     required_error: "Tipo de documento é obrigatório",
   }),
+  plan_price_id: z.string({ required_error: "Plano é obrigatório" }),
 });

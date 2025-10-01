@@ -9,6 +9,7 @@ import Select from "@/components/design/Select";
 import Table, { ColumnType } from "@/components/design/Table/Table";
 import { useCreateBarberShop } from "@/hooks/integration/barbershops/mutations";
 import { useGetBarbershops } from "@/hooks/integration/barbershops/queries";
+import { useGetPlans } from "@/hooks/integration/plans/queries";
 import useDisclosure from "@/hooks/utils/use-disclosure";
 import { FormProvider } from "@/libs/form/FormProvider";
 import { useZodForm } from "@/libs/form/useZodForm";
@@ -21,6 +22,8 @@ import { columns } from "./types";
 
 function Barbershops() {
   const { data } = useGetBarbershops();
+  const { data: plans } = useGetPlans();
+
   const { handleClose, handleOpen, open } = useDisclosure();
   const { mutateAsync: barberShopMutateAsync } = useCreateBarberShop();
   const navigate = useNavigate();
@@ -40,11 +43,15 @@ function Barbershops() {
       document_type: "cpf",
       cover: "",
       description: "",
+      plan_price_id: undefined,
     },
   });
 
   async function handleSubmit(formData: BarberShopWithDefaultTemplate) {
-    await barberShopMutateAsync(formData);
+    await barberShopMutateAsync({
+      ...formData,
+      plan_price_id: Number(formData.plan_price_id),
+    });
     form.reset();
     handleClose();
   }
@@ -314,6 +321,31 @@ function Barbershops() {
                     );
                   }}
                 />
+              </Wrapper>
+            )}
+          />
+
+          <Controller
+            name="plan_price_id"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Wrapper<BarberShopWithDefaultTemplate>
+                errorMessage={fieldState.error?.message}
+                error={Boolean(fieldState.error)}
+                name="plan_price_id"
+                label="Plano:"
+              >
+                <Select
+                  placeholder="Selecione o plano"
+                  onChange={(event) => field.onChange(event)}
+                  value={field.value}
+                >
+                  {plans?.map((plan) => (
+                    <Option key={plan.id} value={plan.id}>
+                      {plan.name}
+                    </Option>
+                  ))}
+                </Select>
               </Wrapper>
             )}
           />
