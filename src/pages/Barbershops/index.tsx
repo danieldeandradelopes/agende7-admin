@@ -62,7 +62,7 @@ function Barbershops() {
 
   return (
     <div className={s.container}>
-      <HeaderPage title="Barbearias" className={s.header} />
+      <HeaderPage title="Barbearias" />
 
       <button
         className={classNames("btn btn--primary", s.btn)}

@@ -5,6 +5,7 @@ import Table from "@/components/design/Table/Table";
 import { useGetPlans } from "@/hooks/integration/plans/queries";
 import useDisclosure from "@/hooks/utils/use-disclosure";
 import s from "./styles.module.scss";
+import classNames from "classnames";
 
 const columns = [
   {
@@ -30,9 +31,14 @@ function Plans() {
 
   return (
     <div className={s.container}>
-      <HeaderPage title="Planos">
-        <button onClick={handleOpen}>Novo</button>
-      </HeaderPage>
+      <HeaderPage title="Planos" />
+
+      <button
+        className={classNames("btn btn--primary", s.btn)}
+        onClick={handleOpen}
+      >
+        Novo
+      </button>
 
       <Table<Plan> columns={columns} data={data ?? []} />
 

@@ -1,4 +1,4 @@
-import { Table as AntdTable } from "antd";
+import { Table as AntdTable, TableProps } from "antd";
 import React from "react";
 
 // Tipo de coluna genérica
@@ -14,6 +14,8 @@ interface ITableProps<T> {
   columns: ColumnType<T>[];
   data: T[];
   onRowClick?: (record: T) => void;
+  pagination?: TableProps<T>["pagination"];
+  onChange?: (pagination: TableProps<T>["pagination"]) => void;
 }
 
 // Componente Table genérico
@@ -21,6 +23,8 @@ function Table<T extends object>({
   columns,
   data,
   onRowClick,
+  pagination,
+  onChange,
 }: ITableProps<T>) {
   // Adaptar as colunas para o formato do AntdTable
   const antdColumns = columns.map((col) => ({
@@ -40,6 +44,10 @@ function Table<T extends object>({
       onRow={(record) => ({
         onClick: () => onRowClick?.(record),
       })}
+      pagination={pagination}
+      onChange={(pagination) => {
+        onChange?.(pagination);
+      }}
     />
   );
 }

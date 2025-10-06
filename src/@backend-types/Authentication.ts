@@ -25,6 +25,7 @@ export default class Authentication {
     readonly user: User,
     readonly token: string,
     readonly barbershop?: BarberShopAuthentication | null,
-    readonly phones?: Phone[] | null
+    readonly phones?: Phone[] | null,
+    readonly refreshToken?: string | null
   ) {}
 }
