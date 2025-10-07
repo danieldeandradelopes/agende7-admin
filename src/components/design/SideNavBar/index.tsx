@@ -14,7 +14,7 @@ function SideNavBar() {
         Barbearias
       </Link>
 
-      <Link to="/barbershop">
+      <Link to="/users">
         <HiUser size={24} />
         Usuários
       </Link>

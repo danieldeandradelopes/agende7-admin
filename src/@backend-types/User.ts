@@ -10,6 +10,11 @@ export interface UserProps {
   password?: string;
 }
 
+export interface ListUsersRequest {
+  page: number;
+  limit: number;
+}
+
 export default class User {
   readonly id: number;
   readonly name: string;
