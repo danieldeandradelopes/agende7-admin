@@ -10,6 +10,7 @@ const Login = lazy(() => import("@/pages/Login/index"));
 const RootLayout = lazy(() => import("@/layouts/RootLayout"));
 const PaymentTest = lazy(() => import("@/pages/PaymentTest/index"));
 const Users = lazy(() => import("@/pages/Users/index"));
+const WhatsappLogin = lazy(() => import("@/pages/WhatsappLogin"));
 
 function PrivateRoutes() {
   const { isAuthenticated } = useAuth();
@@ -43,6 +44,7 @@ function MainRoutes() {
           <Route path="/barbershop/:id" element={<BarberShopDetail />} />
           <Route path="/plans" element={<Plans />} />
           <Route path="/payment-test" element={<PaymentTest />} />
+          <Route path="/whatsapp-login" element={<WhatsappLogin />} />
           <Route path="/users" element={<Users />} />
         </Route>
       </Route>
