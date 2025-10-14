@@ -29,6 +29,7 @@ function PaymentTest() {
   const [initialization, setInitialization] = useState({
     amount: 0,
     preferenceId: "",
+    paymentId: 0,
   });
 
   const handleCreatePreference = async () => {
@@ -41,6 +42,7 @@ function PaymentTest() {
     setInitialization({
       amount: data.payment.amount,
       preferenceId: data.preferenceId,
+      paymentId: data.payment.id ?? 0,
     });
   };
 
@@ -56,6 +58,8 @@ function PaymentTest() {
   };
 
   const onSubmit = async (param: IPaymentFormData): Promise<unknown> => {
+    console.log(param, "param");
+
     try {
       const paymentData: ProcessPaymentRequest = {
         transaction_amount: initialization.amount,
@@ -64,10 +68,10 @@ function PaymentTest() {
         installments: param.formData.installments || 1,
         payment_method_id: param.formData.payment_method_id,
         payer: {
-          email: param.formData.payer?.email || "",
+          email: "danieldeandradelopes@gmail.com",
           identification: {
             type: param.formData.payer?.identification?.type || "",
-            number: param.formData.payer?.identification?.number || "",
+            number: initialization.paymentId.toString() || "",
           },
         },
       };
