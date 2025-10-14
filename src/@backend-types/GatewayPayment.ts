@@ -39,6 +39,7 @@ export interface ProcessPaymentRequest {
       number: string;
     };
   };
+  external_reference: string;
 }
 
 export interface ProcessPaymentResponse {

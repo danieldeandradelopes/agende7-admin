@@ -58,8 +58,6 @@ function PaymentTest() {
   };
 
   const onSubmit = async (param: IPaymentFormData): Promise<unknown> => {
-    console.log(param, "param");
-
     try {
       const paymentData: ProcessPaymentRequest = {
         transaction_amount: initialization.amount,
@@ -68,12 +66,13 @@ function PaymentTest() {
         installments: param.formData.installments || 1,
         payment_method_id: param.formData.payment_method_id,
         payer: {
-          email: "danieldeandradelopes@gmail.com",
+          email: param.formData.payer?.email || "",
           identification: {
             type: param.formData.payer?.identification?.type || "",
             number: initialization.paymentId.toString() || "",
           },
         },
+        external_reference: initialization.paymentId.toString(), // 👈 AQUI
       };
 
       const response = await processPayment(paymentData);
