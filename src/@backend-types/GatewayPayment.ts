@@ -26,6 +26,34 @@ export interface GatewayPaymentProps {
   created_at?: string;
 }
 
+export interface ProcessPaymentRequest {
+  transaction_amount: number;
+  token: string;
+  description: string;
+  installments: number;
+  payment_method_id: string;
+  payer: {
+    email: string;
+    identification: {
+      type: string;
+      number: string;
+    };
+  };
+}
+
+export interface ProcessPaymentResponse {
+  id: string;
+  status: string;
+  status_detail: string;
+  transaction_amount: number;
+  payment_method_id: string;
+  payer: {
+    email: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+
 export default class GatewayPayment {
   readonly id: number;
   readonly preferenceId: string;

@@ -1,11 +1,18 @@
 import Wrapper from "@/components/Wrapper";
 import { useGetPlans } from "@/hooks/integration/plans/queries";
 import { Payment, initMercadoPago } from "@mercadopago/sdk-react";
-import type { IPaymentBrickCustomization } from "@mercadopago/sdk-react/esm/bricks/payment/type";
+import type {
+  IPaymentBrickCustomization,
+  IPaymentFormData,
+} from "@mercadopago/sdk-react/esm/bricks/payment/type";
 import { Select } from "antd";
 import { useState } from "react";
 import s from "./payment.module.scss";
-import { useCreatePreference } from "@/hooks/integration/payment/mutations";
+import {
+  useCreatePreference,
+  useProcessPayment,
+} from "@/hooks/integration/payment/mutations";
+import { ProcessPaymentRequest } from "@/@backend-types/GatewayPayment";
 
 const { Option } = Select;
 
@@ -13,6 +20,7 @@ function PaymentTest() {
   const { data: plans } = useGetPlans();
   const [planId, setPlanId] = useState<number | null>(null);
   const { mutateAsync: createPreference } = useCreatePreference();
+  const { mutateAsync: processPayment } = useProcessPayment();
 
   initMercadoPago(import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY || "", {
     locale: "pt-BR",
@@ -47,8 +55,31 @@ function PaymentTest() {
     },
   };
 
-  const onSubmit = async () => {
-    return Promise.resolve();
+  const onSubmit = async (param: IPaymentFormData): Promise<unknown> => {
+    try {
+      const paymentData: ProcessPaymentRequest = {
+        transaction_amount: initialization.amount,
+        token: param.formData.token || "", // token vem daqui 👈
+        description: "Plano selecionado",
+        installments: param.formData.installments || 1,
+        payment_method_id: param.formData.payment_method_id,
+        payer: {
+          email: param.formData.payer?.email || "",
+          identification: {
+            type: param.formData.payer?.identification?.type || "",
+            number: param.formData.payer?.identification?.number || "",
+          },
+        },
+      };
+
+      const response = await processPayment(paymentData);
+      console.log("Pagamento criado:", response);
+
+      return response; // é obrigatório retornar pro Brick
+    } catch (error) {
+      console.error("Erro ao processar pagamento:", error);
+      throw error;
+    }
   };
 
   return (
