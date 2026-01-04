@@ -3,6 +3,7 @@ import {
   useCreateWorkingHours,
   useDeleteWorkingHours,
 } from "@/hooks/integration/working-hours/mutations";
+import { App } from "antd";
 import classNames from "classnames";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import s from "../styles.module.scss";
@@ -12,6 +13,7 @@ export default function WorkingHoursSection({
 }: {
   barbershopId: number;
 }) {
+  const { modal } = App.useApp();
   const { data: workingHours } = useGetWorkingHours(barbershopId);
   const { mutateAsync: createWorkingHours } = useCreateWorkingHours();
   const { mutateAsync: deleteWorkingHours } = useDeleteWorkingHours();
@@ -43,6 +45,19 @@ export default function WorkingHoursSection({
     } catch {
       return time;
     }
+  };
+
+  const handleDeleteWorkingHours = (id: number) => {
+    modal.confirm({
+      title: "Confirmar exclusão",
+      content: "Tem certeza que deseja remover este horário de funcionamento?",
+      okText: "Sim, remover",
+      cancelText: "Cancelar",
+      okButtonProps: { danger: true },
+      onOk: () => {
+        deleteWorkingHours(id);
+      },
+    });
   };
 
   return (
@@ -95,7 +110,7 @@ export default function WorkingHoursSection({
                 </button>
                 <button
                   className={classNames(s.actionButton, s.delete)}
-                  onClick={() => deleteWorkingHours(wh.id)}
+                  onClick={() => handleDeleteWorkingHours(wh.id)}
                   title="Remover horário"
                 >
                   <FaTrash />

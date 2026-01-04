@@ -4,6 +4,7 @@ import {
   useDeleteService,
 } from "@/hooks/integration/services/mutations";
 import useFormatter from "@/hooks/utils/use-formatter";
+import { App } from "antd";
 import classNames from "classnames";
 import { useState } from "react";
 import { FaSave, FaTimes, FaPlus, FaTrash } from "react-icons/fa";
@@ -14,6 +15,7 @@ export default function ServicesSection({
 }: {
   barbershopId: number;
 }) {
+  const { modal } = App.useApp();
   const { formatMoney } = useFormatter();
   const { data: services } = useGetServices();
   const { mutateAsync: createService } = useCreateService();
@@ -30,6 +32,19 @@ export default function ServicesSection({
     await createService(newService);
     setShowAddForm(false);
     setNewService({ title: "", description: "", price: 0, duration: 0 });
+  };
+
+  const handleDeleteService = (id: number) => {
+    modal.confirm({
+      title: "Confirmar exclusão",
+      content: "Tem certeza que deseja remover este serviço?",
+      okText: "Sim, remover",
+      cancelText: "Cancelar",
+      okButtonProps: { danger: true },
+      onOk: () => {
+        deleteService(id);
+      },
+    });
   };
 
   return (
@@ -59,7 +74,7 @@ export default function ServicesSection({
               <div className={s.sectionActions}>
                 <button
                   className={classNames(s.actionButton, s.delete)}
-                  onClick={() => deleteService(service.id)}
+                  onClick={() => handleDeleteService(service.id)}
                   title="Remover serviço"
                 >
                   <FaTrash />

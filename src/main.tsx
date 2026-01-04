@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Analytics } from "@vercel/analytics/react";
-import { theme as antTheme, ConfigProvider } from "antd";
+import { App as AntdApp, theme as antTheme, ConfigProvider } from "antd";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -36,15 +36,17 @@ function Main() {
         <QueryClientProvider client={queryClient}>
           <StrictMode>
             <BrowserRouter>
-              <AppWithUpdater />
-              <MainRoutes />
-              <ToastContainer
-                position="top-right"
-                closeButton={false}
-                autoClose={2000}
-                theme={theme === "dark" ? "dark" : "light"}
-              />
-              <Analytics />
+              <AntdApp>
+                <AppWithUpdater />
+                <MainRoutes />
+                <ToastContainer
+                  position="top-right"
+                  closeButton={false}
+                  autoClose={2000}
+                  theme={theme === "dark" ? "dark" : "light"}
+                />
+                <Analytics />
+              </AntdApp>
             </BrowserRouter>
           </StrictMode>
         </QueryClientProvider>

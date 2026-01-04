@@ -10,6 +10,7 @@ import { useGetPlanPrices } from "@/hooks/integration/plans/queries";
 import useFormatter from "@/hooks/utils/use-formatter";
 import { FormProvider } from "@/libs/form/FormProvider";
 import { useZodForm } from "@/libs/form/useZodForm";
+import { App } from "antd";
 import classNames from "classnames";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
@@ -23,6 +24,7 @@ export default function SubscriptionsSection({
 }: {
   barbershopId: number;
 }) {
+  const { modal } = App.useApp();
   const { formatMoney } = useFormatter();
   const { data: subscriptions } = useGetSubscriptions(barbershopId);
   const { data: planPrices } = useGetPlanPrices();
@@ -40,6 +42,19 @@ export default function SubscriptionsSection({
     } catch (error) {
       console.error("Erro ao criar subscription:", error);
     }
+  };
+
+  const handleDeleteSubscription = (id: number) => {
+    modal.confirm({
+      title: "Confirmar exclusão",
+      content: "Tem certeza que deseja remover esta subscription?",
+      okText: "Sim, remover",
+      cancelText: "Cancelar",
+      okButtonProps: { danger: true },
+      onOk: () => {
+        deleteSubscription(id);
+      },
+    });
   };
 
   const cycleLabels: Record<string, string> = {
@@ -96,7 +111,7 @@ export default function SubscriptionsSection({
                 <div className={s.sectionActions}>
                   <button
                     className={classNames(s.actionButton, s.delete)}
-                    onClick={() => deleteSubscription(sub.id!)}
+                    onClick={() => handleDeleteSubscription(sub.id!)}
                     title="Remover subscription"
                   >
                     <FaTrash />

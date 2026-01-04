@@ -14,6 +14,7 @@ import {
 import useFormatter from "@/hooks/utils/use-formatter";
 import { FormProvider } from "@/libs/form/FormProvider";
 import { useZodForm } from "@/libs/form/useZodForm";
+import { App } from "antd";
 import classNames from "classnames";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
@@ -30,6 +31,7 @@ export default function AddonsSection({
 }: {
   barbershopId: number;
 }) {
+  const { modal } = App.useApp();
   const { formatMoney } = useFormatter();
   const { data: subscriptions } = useGetSubscriptions(barbershopId);
   const { data: addons } = useGetAddons();
@@ -51,6 +53,19 @@ export default function AddonsSection({
     });
     setShowAddForm(false);
     form.reset();
+  };
+
+  const handleDeleteAddon = (id: number, subscriptionId: number) => {
+    modal.confirm({
+      title: "Confirmar exclusão",
+      content: "Tem certeza que deseja remover este addon?",
+      okText: "Sim, remover",
+      cancelText: "Cancelar",
+      okButtonProps: { danger: true },
+      onOk: () => {
+        deleteSubscriptionAddon({ id, subscriptionId });
+      },
+    });
   };
 
   return (
@@ -114,10 +129,7 @@ export default function AddonsSection({
                   <button
                     className={classNames(s.actionButton, s.delete)}
                     onClick={() =>
-                      deleteSubscriptionAddon({
-                        id: addon.id!,
-                        subscriptionId: addon.subscription_id,
-                      })
+                      handleDeleteAddon(addon.id!, addon.subscription_id)
                     }
                     title="Remover addon"
                   >
