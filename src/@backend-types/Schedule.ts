@@ -15,6 +15,7 @@ interface ScheduleProps {
   customer_phone?: string;
   auto_approve?: boolean;
   end_date: Date;
+  user_id?: number;
   deleted_at?: Date;
   updated_at?: Date;
   created_at?: Date;
@@ -35,6 +36,7 @@ export default class Schedule {
   readonly customer_phone?: string;
   readonly auto_approve?: boolean;
   readonly end_date: Date;
+  readonly user_id?: number;
   readonly deleted_at?: Date;
   readonly updated_at?: Date;
   readonly created_at?: Date;
@@ -54,6 +56,7 @@ export default class Schedule {
     customer_name,
     customer_phone,
     auto_approve,
+    user_id,
     deleted_at,
     updated_at,
     created_at,
@@ -72,6 +75,7 @@ export default class Schedule {
     this.customer_name = customer_name;
     this.customer_phone = customer_phone;
     this.auto_approve = auto_approve;
+    this.user_id = user_id;
     this.deleted_at = deleted_at;
     this.updated_at = updated_at;
     this.created_at = created_at;

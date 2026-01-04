@@ -198,9 +198,11 @@ function AddonsSection({ barbershopId }: { barbershopId: number }) {
                       {...field}
                       placeholder="Selecione o addon"
                       value={field.value ? String(field.value) : undefined}
-                      onChange={(value) =>
-                        field.onChange(value ? Number(value) : undefined)
-                      }
+                      onChange={(value) => {
+                        field.onChange(value ? Number(value) : undefined);
+                        // Limpa o preço quando o addon muda
+                        form.setValue("addon_price_id", undefined);
+                      }}
                     >
                       {addons?.map((addon) => (
                         <Option key={addon.id} value={String(addon.id)}>
@@ -224,24 +226,78 @@ function AddonsSection({ barbershopId }: { barbershopId: number }) {
                 <Controller
                   name="addon_price_id"
                   control={form.control}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      placeholder="Selecione o preço"
-                      value={field.value ? String(field.value) : undefined}
-                      onChange={(value) =>
-                        field.onChange(value ? Number(value) : undefined)
-                      }
-                    >
-                      {addonPrices
-                        ?.filter((ap) => ap.addon_id === form.watch("addon_id"))
-                        .map((ap) => (
+                  render={({ field }) => {
+                    const selectedAddonId = form.watch("addon_id");
+
+                    // Debug: verificar dados
+                    if (selectedAddonId && addonPrices) {
+                      console.log(
+                        "Selected Addon ID:",
+                        selectedAddonId,
+                        typeof selectedAddonId
+                      );
+                      console.log("All Addon Prices:", addonPrices);
+                      console.log(
+                        "Addon Prices types:",
+                        addonPrices.map((ap) => ({
+                          id: ap.id,
+                          addon_id: ap.addon_id,
+                          addon_id_type: typeof ap.addon_id,
+                        }))
+                      );
+                    }
+
+                    const filteredPrices = selectedAddonId
+                      ? addonPrices?.filter((ap) => {
+                          // Compara convertendo ambos para número, pois o backend pode retornar string
+                          const apAddonId =
+                            typeof ap.addon_id === "string"
+                              ? Number(ap.addon_id)
+                              : ap.addon_id;
+                          const selectedId = Number(selectedAddonId);
+                          const matches = apAddonId === selectedId;
+                          if (selectedAddonId) {
+                            console.log(
+                              `Comparing: ${apAddonId} (${typeof apAddonId}) === ${selectedId} (${typeof selectedId}) = ${matches}`
+                            );
+                          }
+                          return matches;
+                        }) || []
+                      : [];
+
+                    console.log("Filtered Prices:", filteredPrices);
+
+                    return (
+                      <Select
+                        {...field}
+                        placeholder={
+                          !selectedAddonId
+                            ? "Selecione um addon primeiro"
+                            : filteredPrices.length === 0
+                            ? "Nenhum preço disponível"
+                            : "Selecione o preço"
+                        }
+                        value={field.value ? String(field.value) : undefined}
+                        onChange={(value) =>
+                          field.onChange(value ? Number(value) : undefined)
+                        }
+                        disabled={
+                          !selectedAddonId || filteredPrices.length === 0
+                        }
+                      >
+                        {filteredPrices.map((ap) => (
                           <Option key={ap.id} value={String(ap.id)}>
-                            {formatMoney(ap.price / 100)} - {ap.billing_cycle}
+                            {formatMoney(ap.price / 100)} -{" "}
+                            {ap.billing_cycle === "monthly"
+                              ? "Mensal"
+                              : ap.billing_cycle === "semiannual"
+                              ? "Semestral"
+                              : "Anual"}
                           </Option>
                         ))}
-                    </Select>
-                  )}
+                      </Select>
+                    );
+                  }}
                 />
               </Wrapper>
               <Wrapper<CreateSubscriptionAddonType>

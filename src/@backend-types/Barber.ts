@@ -8,11 +8,46 @@ interface BarberProps {
   bio: string;
   phone: string;
   rate: number;
+  digital_comission: number;
+  physical_comission: number;
+  services_comission: number;
   avatar?: string;
   email?: string;
   specialties?: string;
   created_at?: string;
   updated_at?: string;
+}
+
+export interface CreateBarberRequest {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  digital_comission: number;
+  physical_comission: number;
+  services_comission: number;
+  avatar?: string;
+}
+
+export interface BarberListResponse {
+  id: number;
+  name: string;
+  email: string;
+  access_level: string;
+  avatar: string | null;
+  phone: string;
+  created_at: string;
+  updated_at: string;
+  is_anonymous: boolean;
+  user_id: number;
+  barber_shop_id: number;
+  specialties: string | null;
+  bio: string | null;
+  is_active: boolean;
+  rate: string;
+  digital_comission: string;
+  physical_comission: string;
+  services_comission: string;
 }
 
 export class AvailableHour {
@@ -29,6 +64,9 @@ export default class Barber {
   readonly bio: string;
   readonly phone: string;
   readonly rate: number;
+  readonly digital_comission: number;
+  readonly physical_comission: number;
+  readonly services_comission: number;
   readonly avatar?: string;
   readonly email?: string;
   readonly specialties?: string;
@@ -45,6 +83,9 @@ export default class Barber {
     bio,
     phone,
     rate,
+    digital_comission,
+    physical_comission,
+    services_comission,
     avatar,
     email,
     specialties,
@@ -60,6 +101,9 @@ export default class Barber {
     this.bio = bio;
     this.phone = phone;
     this.rate = rate;
+    this.digital_comission = digital_comission;
+    this.physical_comission = physical_comission;
+    this.services_comission = services_comission;
     this.avatar = avatar;
     this.email = email;
     this.specialties = specialties;

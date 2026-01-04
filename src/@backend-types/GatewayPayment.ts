@@ -7,8 +7,10 @@ export interface ItemsPayment extends Items {
 }
 
 export interface CreatePreferenceRequest {
-  items: ItemsPayment[];
-  planId: number;
+  items?: ItemsPayment[];
+  planId?: number;
+  planPriceId?: number;
+  addonIds?: number[];
 }
 
 export interface CreatePreferenceResponse {
@@ -39,7 +41,7 @@ export interface ProcessPaymentRequest {
       number: string;
     };
   };
-  external_reference: string;
+  external_reference?: string;
 }
 
 export interface ProcessPaymentResponse {
