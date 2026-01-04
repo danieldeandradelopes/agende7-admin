@@ -36,7 +36,23 @@ import {
 import { useGetBranding } from "@/hooks/integration/branding/queries";
 import { useGetManifest } from "@/hooks/integration/manifest/queries";
 import { useUpdateManifest } from "@/hooks/integration/manifest/mutations";
+import useFormatter from "@/hooks/utils/use-formatter";
+import { formatDate } from "@/utils/date";
 import { FormProvider } from "@/libs/form/FormProvider";
+
+// Função auxiliar para formatar datas com segurança
+const safeFormatDate = (date: string | undefined | null): string => {
+  if (!date) return "N/A";
+  try {
+    return formatDate(date);
+  } catch {
+    try {
+      return new Date(date).toLocaleDateString("pt-BR");
+    } catch {
+      return date;
+    }
+  }
+};
 import { useZodForm } from "@/libs/form/useZodForm";
 import { Collapse } from "antd";
 import classNames from "classnames";
@@ -58,6 +74,7 @@ import s from "./styles.module.scss";
 
 // Componentes de seção
 function AddonsSection({ barbershopId }: { barbershopId: number }) {
+  const { formatMoney } = useFormatter();
   const { data: subscriptions } = useGetSubscriptions(barbershopId);
   const { data: addons } = useGetAddons();
   const { data: addonPrices } = useGetAddonPrices();
@@ -81,91 +98,200 @@ function AddonsSection({ barbershopId }: { barbershopId: number }) {
   };
 
   return (
-    <div>
+    <div className={s.section}>
       <h3>Addons Ativos</h3>
       {subscriptionAddons.length === 0 ? (
-        <p>Nenhum addon ativo</p>
+        <div className={s.emptyMessage}>
+          <p>Nenhum addon ativo</p>
+        </div>
       ) : (
-        <ul>
+        <ul className={s.sectionList}>
           {subscriptionAddons.map((addon) => {
             const addonInfo = addons?.find((a) => a.id === addon.addon_id);
+            const addonPrice = addonPrices?.find(
+              (ap) => ap.id === addon.addon_price_id
+            );
             return (
               <li key={addon.id}>
-                {addonInfo?.name} - Status: {addon.status}
-                <button
-                  onClick={() =>
-                    deleteSubscriptionAddon({
-                      id: addon.id!,
-                      subscriptionId: addon.subscription_id,
-                    })
-                  }
-                >
-                  <FaTrash />
-                </button>
+                <div className={s.sectionItem}>
+                  <div>
+                    <strong>{addonInfo?.name || "Addon desconhecido"}</strong>
+                    {addonPrice && (
+                      <div
+                        style={{
+                          marginTop: "4px",
+                          fontSize: "13px",
+                          color: "var(--color-text-secondary)",
+                        }}
+                      >
+                        {formatMoney(addonPrice.price / 100)} •{" "}
+                        {addonPrice.billing_cycle === "monthly"
+                          ? "Mensal"
+                          : addonPrice.billing_cycle === "semiannual"
+                          ? "Semestral"
+                          : "Anual"}
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        marginTop: "4px",
+                        fontSize: "12px",
+                        color: "var(--color-text-secondary)",
+                      }}
+                    >
+                      {addon.start_date &&
+                        `Início: ${safeFormatDate(addon.start_date)}`}
+                      {addon.end_date &&
+                        ` • Fim: ${safeFormatDate(addon.end_date)}`}
+                    </div>
+                  </div>
+                  <span
+                    className={classNames(
+                      s.statusBadge,
+                      s[addon.status || "active"]
+                    )}
+                  >
+                    {addon.status || "active"}
+                  </span>
+                </div>
+                <div className={s.sectionActions}>
+                  <button
+                    className={classNames(s.actionButton, s.delete)}
+                    onClick={() =>
+                      deleteSubscriptionAddon({
+                        id: addon.id!,
+                        subscriptionId: addon.subscription_id,
+                      })
+                    }
+                    title="Remover addon"
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
               </li>
             );
           })}
         </ul>
       )}
       {!showAddForm && (
-        <button
-          className="btn btn--primary"
-          onClick={() => setShowAddForm(true)}
-        >
+        <button className={s.addButton} onClick={() => setShowAddForm(true)}>
           <FaPlus /> Adicionar Addon
         </button>
       )}
       {showAddForm && activeSubscription && (
-        <FormProvider form={form} onSubmit={handleAddAddon}>
-          <Controller
-            name="addon_id"
-            control={form.control}
-            render={({ field }) => (
-              <Select {...field} placeholder="Selecione o addon">
-                {addons?.map((addon) => (
-                  <Option key={addon.id} value={addon.id}>
-                    {addon.name}
-                  </Option>
-                ))}
-              </Select>
-            )}
-          />
-          <Controller
-            name="addon_price_id"
-            control={form.control}
-            render={({ field }) => (
-              <Select {...field} placeholder="Selecione o preço">
-                {addonPrices
-                  ?.filter((ap) => ap.addon_id === form.watch("addon_id"))
-                  .map((ap) => (
-                    <Option key={ap.id} value={ap.id}>
-                      {ap.price} - {ap.billing_cycle}
-                    </Option>
-                  ))}
-              </Select>
-            )}
-          />
-          <Controller
-            name="start_date"
-            control={form.control}
-            render={({ field }) => <input type="date" {...field} />}
-          />
-          <Controller
-            name="end_date"
-            control={form.control}
-            render={({ field }) => <input type="date" {...field} />}
-          />
-          <button type="submit">Salvar</button>
-          <button type="button" onClick={() => setShowAddForm(false)}>
-            Cancelar
-          </button>
-        </FormProvider>
+        <div className={s.formSection}>
+          <FormProvider form={form} onSubmit={handleAddAddon}>
+            <div className={s.formGridSection}>
+              <Wrapper<CreateSubscriptionAddonType>
+                name="addon_id"
+                label="Addon:"
+                error={Boolean(form.formState.errors.addon_id)}
+                errorMessage={
+                  form.formState.errors.addon_id?.message as string | undefined
+                }
+              >
+                <Controller
+                  name="addon_id"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Select {...field} placeholder="Selecione o addon">
+                      {addons?.map((addon) => (
+                        <Option key={addon.id} value={addon.id}>
+                          {addon.name}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                />
+              </Wrapper>
+              <Wrapper<CreateSubscriptionAddonType>
+                name="addon_price_id"
+                label="Preço:"
+                error={Boolean(form.formState.errors.addon_price_id)}
+                errorMessage={
+                  form.formState.errors.addon_price_id?.message as
+                    | string
+                    | undefined
+                }
+              >
+                <Controller
+                  name="addon_price_id"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Select {...field} placeholder="Selecione o preço">
+                      {addonPrices
+                        ?.filter((ap) => ap.addon_id === form.watch("addon_id"))
+                        .map((ap) => (
+                          <Option key={ap.id} value={ap.id}>
+                            {formatMoney(ap.price / 100)} - {ap.billing_cycle}
+                          </Option>
+                        ))}
+                    </Select>
+                  )}
+                />
+              </Wrapper>
+              <Wrapper<CreateSubscriptionAddonType>
+                name="start_date"
+                label="Data de Início:"
+                error={Boolean(form.formState.errors.start_date)}
+                errorMessage={
+                  form.formState.errors.start_date?.message as
+                    | string
+                    | undefined
+                }
+              >
+                <Controller
+                  name="start_date"
+                  control={form.control}
+                  render={({ field }) => (
+                    <input type="date" className={s.formInput} {...field} />
+                  )}
+                />
+              </Wrapper>
+              <Wrapper<CreateSubscriptionAddonType>
+                name="end_date"
+                label="Data de Fim:"
+                error={Boolean(form.formState.errors.end_date)}
+                errorMessage={
+                  form.formState.errors.end_date?.message as string | undefined
+                }
+              >
+                <Controller
+                  name="end_date"
+                  control={form.control}
+                  render={({ field }) => (
+                    <input type="date" className={s.formInput} {...field} />
+                  )}
+                />
+              </Wrapper>
+            </div>
+            <div className={s.formButtons}>
+              <button
+                type="button"
+                className={classNames(s.formButton, s.secondary)}
+                onClick={() => {
+                  setShowAddForm(false);
+                  form.reset();
+                }}
+              >
+                <FaTimes /> Cancelar
+              </button>
+              <button
+                type="submit"
+                className={classNames(s.formButton, s.primary)}
+              >
+                <FaSave /> Salvar
+              </button>
+            </div>
+          </FormProvider>
+        </div>
       )}
     </div>
   );
 }
 
 function CurrentPlanSection({ barbershopId }: { barbershopId: number }) {
+  const { formatMoney } = useFormatter();
   const { data: subscriptions } = useGetSubscriptions(barbershopId);
   const { data: planPrices } = useGetPlanPrices();
   const { data: plans } = useGetPlans();
@@ -179,39 +305,71 @@ function CurrentPlanSection({ barbershopId }: { barbershopId: number }) {
     : null;
 
   if (!activeSubscription) {
-    return <p>Nenhuma subscription ativa</p>;
+    return (
+      <div className={s.section}>
+        <div className={s.emptyMessage}>
+          <p>Nenhuma subscription ativa</p>
+        </div>
+      </div>
+    );
   }
 
+  const cycleLabels: Record<string, string> = {
+    monthly: "Mensal",
+    semiannual: "Semestral",
+    yearly: "Anual",
+  };
+
   return (
-    <div>
+    <div className={s.section}>
       <h3>Plano Atual</h3>
-      <p>
-        <strong>Plano:</strong> {plan?.name}
-      </p>
-      <p>
-        <strong>Preço:</strong> R$ {planPrice?.price}
-      </p>
-      <p>
-        <strong>Ciclo:</strong> {planPrice?.billing_cycle}
-      </p>
-      <p>
-        <strong>Status:</strong> {activeSubscription.status}
-      </p>
-      <p>
-        <strong>Início:</strong>{" "}
-        {new Date(activeSubscription.start_date).toLocaleDateString()}
-      </p>
-      {activeSubscription.end_date && (
-        <p>
-          <strong>Fim:</strong>{" "}
-          {new Date(activeSubscription.end_date).toLocaleDateString()}
-        </p>
-      )}
+      <div className={s.infoGrid}>
+        <div className={s.infoItem}>
+          <strong>Plano</strong>
+          <span>{plan?.name || "N/A"}</span>
+        </div>
+        <div className={s.infoItem}>
+          <strong>Preço</strong>
+          <span>{planPrice ? formatMoney(planPrice.price / 100) : "N/A"}</span>
+        </div>
+        <div className={s.infoItem}>
+          <strong>Ciclo</strong>
+          <span>
+            {planPrice?.billing_cycle
+              ? cycleLabels[planPrice.billing_cycle] || planPrice.billing_cycle
+              : "N/A"}
+          </span>
+        </div>
+        <div className={s.infoItem}>
+          <strong>Status</strong>
+          <span>
+            <span
+              className={classNames(
+                s.statusBadge,
+                s[activeSubscription.status || "past_due"]
+              )}
+            >
+              {activeSubscription.status || "past_due"}
+            </span>
+          </span>
+        </div>
+        <div className={s.infoItem}>
+          <strong>Início</strong>
+          <span>{safeFormatDate(activeSubscription.start_date)}</span>
+        </div>
+        {activeSubscription.end_date && (
+          <div className={s.infoItem}>
+            <strong>Fim</strong>
+            <span>{safeFormatDate(activeSubscription.end_date)}</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
 function SubscriptionsSection({ barbershopId }: { barbershopId: number }) {
+  const { formatMoney } = useFormatter();
   const { data: subscriptions } = useGetSubscriptions(barbershopId);
   const { data: planPrices } = useGetPlanPrices();
   const { mutateAsync: createSubscription } = useCreateSubscription();
@@ -225,72 +383,180 @@ function SubscriptionsSection({ barbershopId }: { barbershopId: number }) {
     form.reset();
   };
 
+  const cycleLabels: Record<string, string> = {
+    monthly: "Mensal",
+    semiannual: "Semestral",
+    yearly: "Anual",
+  };
+
   return (
-    <div>
+    <div className={s.section}>
       <h3>Subscriptions</h3>
       {subscriptions && subscriptions.length === 0 ? (
-        <p>Nenhuma subscription</p>
+        <div className={s.emptyMessage}>
+          <p>Nenhuma subscription</p>
+        </div>
       ) : (
-        subscriptions?.map((sub) => (
-          <div key={sub.id}>
-            <p>
-              Subscription #{sub.id} - Status: {sub.status}
-            </p>
-            <button onClick={() => deleteSubscription(sub.id!)}>
-              <FaTrash />
-            </button>
-          </div>
-        ))
+        <ul className={s.sectionList}>
+          {subscriptions?.map((sub) => {
+            const planPrice = planPrices?.find(
+              (pp) => pp.id === sub.plan_price_id
+            );
+            return (
+              <li key={sub.id}>
+                <div className={s.sectionItem}>
+                  <div>
+                    <strong>Subscription #{sub.id}</strong>
+                    {planPrice && (
+                      <div
+                        style={{
+                          marginTop: "4px",
+                          fontSize: "12px",
+                          color: "var(--color-text-secondary)",
+                        }}
+                      >
+                        {formatMoney(planPrice.price / 100)} -{" "}
+                        {cycleLabels[planPrice.billing_cycle] ||
+                          planPrice.billing_cycle}
+                        {sub.start_date &&
+                          ` • Início: ${safeFormatDate(sub.start_date)}`}
+                        {sub.end_date &&
+                          ` • Fim: ${safeFormatDate(sub.end_date)}`}
+                      </div>
+                    )}
+                  </div>
+                  <span
+                    className={classNames(
+                      s.statusBadge,
+                      s[sub.status || "past_due"]
+                    )}
+                  >
+                    {sub.status || "past_due"}
+                  </span>
+                </div>
+                <div className={s.sectionActions}>
+                  <button
+                    className={classNames(s.actionButton, s.delete)}
+                    onClick={() => deleteSubscription(sub.id!)}
+                    title="Remover subscription"
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       )}
       {!showAddForm && (
-        <button
-          className="btn btn--primary"
-          onClick={() => setShowAddForm(true)}
-        >
+        <button className={s.addButton} onClick={() => setShowAddForm(true)}>
           <FaPlus /> Adicionar Subscription
         </button>
       )}
       {showAddForm && (
-        <FormProvider form={form} onSubmit={handleAddSubscription}>
-          <Controller
-            name="plan_price_id"
-            control={form.control}
-            render={({ field }) => (
-              <Select {...field} placeholder="Selecione o plano/preço">
-                {planPrices?.map((pp) => (
-                  <Option key={pp.id} value={pp.id}>
-                    {pp.price} - {pp.billing_cycle}
-                  </Option>
-                ))}
-              </Select>
-            )}
-          />
-          <Controller
-            name="start_date"
-            control={form.control}
-            render={({ field }) => <input type="date" {...field} />}
-          />
-          <Controller
-            name="end_date"
-            control={form.control}
-            render={({ field }) => <input type="date" {...field} />}
-          />
-          <Controller
-            name="status"
-            control={form.control}
-            render={({ field }) => (
-              <Select {...field} placeholder="Status">
-                <Option value="active">Active</Option>
-                <Option value="past_due">Past Due</Option>
-                <Option value="canceled">Canceled</Option>
-              </Select>
-            )}
-          />
-          <button type="submit">Salvar</button>
-          <button type="button" onClick={() => setShowAddForm(false)}>
-            Cancelar
-          </button>
-        </FormProvider>
+        <div className={s.formSection}>
+          <FormProvider form={form} onSubmit={handleAddSubscription}>
+            <div className={s.formGridSection}>
+              <Wrapper<CreateSubscriptionType>
+                name="plan_price_id"
+                label="Plano/Preço:"
+                error={Boolean(form.formState.errors.plan_price_id)}
+                errorMessage={
+                  form.formState.errors.plan_price_id?.message as
+                    | string
+                    | undefined
+                }
+              >
+                <Controller
+                  name="plan_price_id"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Select {...field} placeholder="Selecione o plano/preço">
+                      {planPrices?.map((pp) => (
+                        <Option key={pp.id} value={pp.id}>
+                          {formatMoney(pp.price / 100)} -{" "}
+                          {cycleLabels[pp.billing_cycle] || pp.billing_cycle}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                />
+              </Wrapper>
+              <Wrapper<CreateSubscriptionType>
+                name="start_date"
+                label="Data de Início:"
+                error={Boolean(form.formState.errors.start_date)}
+                errorMessage={
+                  form.formState.errors.start_date?.message as
+                    | string
+                    | undefined
+                }
+              >
+                <Controller
+                  name="start_date"
+                  control={form.control}
+                  render={({ field }) => (
+                    <input type="date" className={s.formInput} {...field} />
+                  )}
+                />
+              </Wrapper>
+              <Wrapper<CreateSubscriptionType>
+                name="end_date"
+                label="Data de Fim:"
+                error={Boolean(form.formState.errors.end_date)}
+                errorMessage={
+                  form.formState.errors.end_date?.message as string | undefined
+                }
+              >
+                <Controller
+                  name="end_date"
+                  control={form.control}
+                  render={({ field }) => (
+                    <input type="date" className={s.formInput} {...field} />
+                  )}
+                />
+              </Wrapper>
+              <Wrapper<CreateSubscriptionType>
+                name="status"
+                label="Status:"
+                error={Boolean(form.formState.errors.status)}
+                errorMessage={
+                  form.formState.errors.status?.message as string | undefined
+                }
+              >
+                <Controller
+                  name="status"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Select {...field} placeholder="Status">
+                      <Option value="active">Active</Option>
+                      <Option value="past_due">Past Due</Option>
+                      <Option value="canceled">Canceled</Option>
+                    </Select>
+                  )}
+                />
+              </Wrapper>
+            </div>
+            <div className={s.formButtons}>
+              <button
+                type="button"
+                className={classNames(s.formButton, s.secondary)}
+                onClick={() => {
+                  setShowAddForm(false);
+                  form.reset();
+                }}
+              >
+                <FaTimes /> Cancelar
+              </button>
+              <button
+                type="submit"
+                className={classNames(s.formButton, s.primary)}
+              >
+                <FaSave /> Salvar
+              </button>
+            </div>
+          </FormProvider>
+        </div>
       )}
     </div>
   );
@@ -298,6 +564,7 @@ function SubscriptionsSection({ barbershopId }: { barbershopId: number }) {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ServicesSection(_props: { barbershopId: number }) {
+  const { formatMoney } = useFormatter();
   const { data: services } = useGetServices();
   const { mutateAsync: createService } = useCreateService();
   const { mutateAsync: deleteService } = useDeleteService();
@@ -316,72 +583,173 @@ function ServicesSection(_props: { barbershopId: number }) {
   };
 
   return (
-    <div>
+    <div className={s.section}>
       <h3>Serviços</h3>
       {services && services.length === 0 ? (
-        <p>Nenhum serviço cadastrado</p>
+        <div className={s.emptyMessage}>
+          <p>Nenhum serviço cadastrado</p>
+        </div>
       ) : (
-        <ul>
+        <ul className={s.sectionList}>
           {services?.map((service) => (
             <li key={service.id}>
-              {service.title} - R$ {service.price} ({service.duration}min)
-              <button onClick={() => deleteService(service.id)}>
-                <FaTrash />
-              </button>
+              <div className={s.sectionItem}>
+                <div>
+                  <strong>{service.title}</strong>
+                  {service.description && (
+                    <div className={s.serviceDescription}>
+                      {service.description}
+                    </div>
+                  )}
+                  <div className={s.servicePrice}>
+                    {formatMoney(service.price / 100)} • {service.duration}min
+                  </div>
+                </div>
+              </div>
+              <div className={s.sectionActions}>
+                <button
+                  className={classNames(s.actionButton, s.delete)}
+                  onClick={() => deleteService(service.id)}
+                  title="Remover serviço"
+                >
+                  <FaTrash />
+                </button>
+              </div>
             </li>
           ))}
         </ul>
       )}
       {!showAddForm && (
-        <button
-          className="btn btn--primary"
-          onClick={() => setShowAddForm(true)}
-        >
+        <button className={s.addButton} onClick={() => setShowAddForm(true)}>
           <FaPlus /> Adicionar Serviço
         </button>
       )}
       {showAddForm && (
-        <div>
-          <input
-            type="text"
-            placeholder="Título"
-            value={newService.title}
-            onChange={(e) =>
-              setNewService({ ...newService, title: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            placeholder="Descrição"
-            value={newService.description}
-            onChange={(e) =>
-              setNewService({ ...newService, description: e.target.value })
-            }
-          />
-          <input
-            type="number"
-            placeholder="Preço"
-            value={newService.price}
-            onChange={(e) =>
-              setNewService({
-                ...newService,
-                price: parseFloat(e.target.value),
-              })
-            }
-          />
-          <input
-            type="number"
-            placeholder="Duração (min)"
-            value={newService.duration}
-            onChange={(e) =>
-              setNewService({
-                ...newService,
-                duration: parseInt(e.target.value),
-              })
-            }
-          />
-          <button onClick={handleAddService}>Salvar</button>
-          <button onClick={() => setShowAddForm(false)}>Cancelar</button>
+        <div className={s.formSection}>
+          <div className={s.formGridSection}>
+            <div>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "8px",
+                  fontWeight: 500,
+                }}
+              >
+                Título:
+              </label>
+              <input
+                type="text"
+                className={s.formInput}
+                placeholder="Título do serviço"
+                value={newService.title}
+                onChange={(e) =>
+                  setNewService({ ...newService, title: e.target.value })
+                }
+              />
+            </div>
+            <div>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "8px",
+                  fontWeight: 500,
+                }}
+              >
+                Descrição:
+              </label>
+              <input
+                type="text"
+                className={s.formInput}
+                placeholder="Descrição do serviço"
+                value={newService.description}
+                onChange={(e) =>
+                  setNewService({ ...newService, description: e.target.value })
+                }
+              />
+            </div>
+            <div>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "8px",
+                  fontWeight: 500,
+                }}
+              >
+                Preço (em centavos):
+              </label>
+              <input
+                type="number"
+                className={s.formInput}
+                placeholder="Ex: 2500 (R$ 25,00)"
+                value={newService.price || ""}
+                onChange={(e) =>
+                  setNewService({
+                    ...newService,
+                    price: parseFloat(e.target.value) || 0,
+                  })
+                }
+              />
+              {newService.price > 0 && (
+                <div
+                  style={{
+                    marginTop: "4px",
+                    fontSize: "12px",
+                    color: "var(--color-text-secondary)",
+                  }}
+                >
+                  {formatMoney(newService.price / 100)}
+                </div>
+              )}
+            </div>
+            <div>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "8px",
+                  fontWeight: 500,
+                }}
+              >
+                Duração (minutos):
+              </label>
+              <input
+                type="number"
+                className={s.formInput}
+                placeholder="Duração em minutos"
+                value={newService.duration || ""}
+                onChange={(e) =>
+                  setNewService({
+                    ...newService,
+                    duration: parseInt(e.target.value) || 0,
+                  })
+                }
+              />
+            </div>
+          </div>
+          <div className={s.formButtons}>
+            <button
+              className={classNames(s.formButton, s.secondary)}
+              onClick={() => {
+                setShowAddForm(false);
+                setNewService({
+                  title: "",
+                  description: "",
+                  price: 0,
+                  duration: 0,
+                });
+              }}
+            >
+              <FaTimes /> Cancelar
+            </button>
+            <button
+              className={classNames(s.formButton, s.primary)}
+              onClick={handleAddService}
+              disabled={
+                !newService.title || !newService.price || !newService.duration
+              }
+            >
+              <FaSave /> Salvar
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -403,28 +771,87 @@ function WorkingHoursSection({ barbershopId }: { barbershopId: number }) {
     "sábado",
   ];
 
+  const dayLabels: Record<string, string> = {
+    domingo: "Domingo",
+    segunda: "Segunda-feira",
+    terça: "Terça-feira",
+    quarta: "Quarta-feira",
+    quinta: "Quinta-feira",
+    sexta: "Sexta-feira",
+    sábado: "Sábado",
+  };
+
+  const formatTimeSlot = (time: string) => {
+    try {
+      const [hours, minutes] = time.split(":");
+      return `${hours}:${minutes}`;
+    } catch {
+      return time;
+    }
+  };
+
   return (
-    <div>
+    <div className={s.section}>
       <h3>Horários de Funcionamento</h3>
       {workingHours && workingHours.length === 0 ? (
-        <p>Nenhum horário cadastrado</p>
+        <div className={s.emptyMessage}>
+          <p>Nenhum horário cadastrado</p>
+        </div>
       ) : (
-        <ul>
+        <ul className={s.sectionList}>
           {workingHours?.map((wh) => (
             <li key={wh.id}>
-              {wh.week_day}: {wh.is_open ? wh.time_slots.join(", ") : "Fechado"}
-              <button onClick={() => {}}>
-                <FaEdit />
-              </button>
-              <button onClick={() => deleteWorkingHours(wh.id)}>
-                <FaTrash />
-              </button>
+              <div className={s.sectionItem}>
+                <div>
+                  <strong>{dayLabels[wh.week_day] || wh.week_day}</strong>
+                  <div style={{ marginTop: "8px" }}>
+                    {wh.is_open ? (
+                      wh.time_slots.length > 0 ? (
+                        <div className={s.timeSlots}>
+                          {wh.time_slots.map((slot, idx) => (
+                            <span key={idx} className={s.timeSlot}>
+                              {formatTimeSlot(slot)}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <span
+                          style={{
+                            color: "var(--color-success, #28a745)",
+                            fontSize: "14px",
+                          }}
+                        >
+                          Aberto (sem horários específicos)
+                        </span>
+                      )
+                    ) : (
+                      <span className={s.closedBadge}>Fechado</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className={s.sectionActions}>
+                <button
+                  className={classNames(s.actionButton, s.edit)}
+                  onClick={() => {}}
+                  title="Editar horários"
+                >
+                  <FaEdit />
+                </button>
+                <button
+                  className={classNames(s.actionButton, s.delete)}
+                  onClick={() => deleteWorkingHours(wh.id)}
+                  title="Remover horário"
+                >
+                  <FaTrash />
+                </button>
+              </div>
             </li>
           ))}
         </ul>
       )}
       <button
-        className="btn btn--primary"
+        className={s.addButton}
         onClick={() => {
           const days = daysOfWeek.map((day) => ({
             week_day: day,
@@ -445,14 +872,30 @@ function BrandingSection(_props: { barbershopId: number }) {
   const { data: branding } = useGetBranding();
 
   return (
-    <div>
+    <div className={s.section}>
       <h3>Branding</h3>
       {branding && branding.length > 0 ? (
-        <p>Branding configurado: {branding[0].name}</p>
+        <div className={s.infoGrid}>
+          <div className={s.infoItem}>
+            <strong>Nome do Tema</strong>
+            <span>{branding[0].name}</span>
+          </div>
+        </div>
       ) : (
-        <p>Nenhum branding configurado</p>
+        <div className={s.emptyMessage}>
+          <p>Nenhum branding configurado</p>
+        </div>
       )}
-      <p>Edição de branding será implementada na próxima versão</p>
+      <p
+        style={{
+          marginTop: "20px",
+          fontSize: "14px",
+          color: "var(--color-text-secondary)",
+          fontStyle: "italic",
+        }}
+      >
+        Edição de branding será implementada na próxima versão
+      </p>
     </div>
   );
 }
@@ -479,60 +922,165 @@ function ManifestSection({ barbershopId }: { barbershopId: number }) {
     setIsEditing(false);
   };
 
-  if (!manifest) return <p>Carregando manifest...</p>;
+  if (!manifest)
+    return (
+      <div className={s.section}>
+        <p>Carregando manifest...</p>
+      </div>
+    );
 
   return (
-    <div>
-      <h3>Manifest</h3>
-      {!isEditing && (
-        <button className="btn btn--primary" onClick={() => setIsEditing(true)}>
-          <FaEdit /> Editar
-        </button>
-      )}
+    <div className={s.section}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
+        <h3 style={{ margin: 0 }}>Manifest</h3>
+        {!isEditing && (
+          <button className={s.addButton} onClick={() => setIsEditing(true)}>
+            <FaEdit /> Editar
+          </button>
+        )}
+      </div>
       <FormProvider form={form} onSubmit={handleSubmit}>
-        <Controller
-          name="name"
-          control={form.control}
-          render={({ field }) => (
-            <input
-              type="text"
-              placeholder="Nome"
-              {...field}
-              disabled={!isEditing}
+        <div className={s.formGridSection}>
+          <Wrapper<UpdateManifestType>
+            name="name"
+            label="Nome:"
+            error={Boolean(form.formState.errors.name)}
+            errorMessage={
+              form.formState.errors.name?.message as string | undefined
+            }
+          >
+            <Controller
+              name="name"
+              control={form.control}
+              render={({ field }) => (
+                <input
+                  type="text"
+                  className={classNames(
+                    s.formInput,
+                    !isEditing && s.inputDisabled
+                  )}
+                  placeholder="Nome"
+                  {...field}
+                  disabled={!isEditing}
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          name="short_name"
-          control={form.control}
-          render={({ field }) => (
-            <input
-              type="text"
-              placeholder="Nome curto"
-              {...field}
-              disabled={!isEditing}
+          </Wrapper>
+          <Wrapper<UpdateManifestType>
+            name="short_name"
+            label="Nome Curto:"
+            error={Boolean(form.formState.errors.short_name)}
+            errorMessage={
+              form.formState.errors.short_name?.message as string | undefined
+            }
+          >
+            <Controller
+              name="short_name"
+              control={form.control}
+              render={({ field }) => (
+                <input
+                  type="text"
+                  className={classNames(
+                    s.formInput,
+                    !isEditing && s.inputDisabled
+                  )}
+                  placeholder="Nome curto"
+                  {...field}
+                  disabled={!isEditing}
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          name="theme_color"
-          control={form.control}
-          render={({ field }) => (
-            <input type="color" {...field} disabled={!isEditing} />
-          )}
-        />
-        <Controller
-          name="background_color"
-          control={form.control}
-          render={({ field }) => (
-            <input type="color" {...field} disabled={!isEditing} />
-          )}
-        />
+          </Wrapper>
+        </div>
+        <div className={s.formGridSection}>
+          <div className={s.colorPicker}>
+            <label>Cor do Tema:</label>
+            <Controller
+              name="theme_color"
+              control={form.control}
+              render={({ field }) => (
+                <input
+                  type="color"
+                  {...field}
+                  disabled={!isEditing}
+                  style={{
+                    opacity: isEditing ? 1 : 0.5,
+                    cursor: isEditing ? "pointer" : "not-allowed",
+                  }}
+                />
+              )}
+            />
+            {manifest.theme_color && (
+              <span
+                style={{
+                  fontSize: "14px",
+                  color: "var(--color-text-secondary)",
+                }}
+              >
+                {manifest.theme_color}
+              </span>
+            )}
+          </div>
+          <div className={s.colorPicker}>
+            <label>Cor de Fundo:</label>
+            <Controller
+              name="background_color"
+              control={form.control}
+              render={({ field }) => (
+                <input
+                  type="color"
+                  {...field}
+                  disabled={!isEditing}
+                  style={{
+                    opacity: isEditing ? 1 : 0.5,
+                    cursor: isEditing ? "pointer" : "not-allowed",
+                  }}
+                />
+              )}
+            />
+            {manifest.background_color && (
+              <span
+                style={{
+                  fontSize: "14px",
+                  color: "var(--color-text-secondary)",
+                }}
+              >
+                {manifest.background_color}
+              </span>
+            )}
+          </div>
+        </div>
         {isEditing && (
-          <div>
-            <button type="submit">Salvar</button>
-            <button type="button" onClick={() => setIsEditing(false)}>
-              Cancelar
+          <div className={s.formButtons}>
+            <button
+              type="button"
+              className={classNames(s.formButton, s.secondary)}
+              onClick={() => {
+                setIsEditing(false);
+                if (manifest) {
+                  form.reset({
+                    name: manifest.name,
+                    short_name: manifest.short_name,
+                    theme_color: manifest.theme_color,
+                    background_color: manifest.background_color,
+                  });
+                }
+              }}
+            >
+              <FaTimes /> Cancelar
+            </button>
+            <button
+              type="submit"
+              className={classNames(s.formButton, s.primary)}
+            >
+              <FaSave /> Salvar
             </button>
           </div>
         )}
