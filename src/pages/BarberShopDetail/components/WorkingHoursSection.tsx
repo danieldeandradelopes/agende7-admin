@@ -4,6 +4,7 @@ import {
   useDeleteWorkingHours,
 } from "@/hooks/integration/working-hours/mutations";
 import { App } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import classNames from "classnames";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import s from "../styles.module.scss";
@@ -50,10 +51,35 @@ export default function WorkingHoursSection({
   const handleDeleteWorkingHours = (id: number) => {
     modal.confirm({
       title: "Confirmar exclusão",
-      content: "Tem certeza que deseja remover este horário de funcionamento?",
+      icon: (
+        <ExclamationCircleOutlined style={{ color: "var(--color-error)" }} />
+      ),
+      content: (
+        <div style={{ marginTop: 16 }}>
+          <p style={{ marginBottom: 0, fontSize: 14, lineHeight: 1.5 }}>
+            Tem certeza que deseja remover este horário de funcionamento? Esta
+            ação não pode ser desfeita.
+          </p>
+        </div>
+      ),
       okText: "Sim, remover",
       cancelText: "Cancelar",
-      okButtonProps: { danger: true },
+      okButtonProps: {
+        danger: true,
+        style: {
+          backgroundColor: "var(--color-error)",
+          borderColor: "var(--color-error)",
+        },
+      },
+      cancelButtonProps: {
+        style: {
+          backgroundColor: "transparent",
+          borderColor: "var(--color-border)",
+          color: "var(--color-text-primary)",
+        },
+      },
+      width: 480,
+      centered: true,
       onOk: () => {
         deleteWorkingHours(id);
       },

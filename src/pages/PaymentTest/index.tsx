@@ -76,9 +76,7 @@ function PaymentTest() {
       };
 
       const response = await processPayment(paymentData);
-      console.log("Pagamento criado:", response);
-
-      return response; // é obrigatório retornar pro Brick
+      return response;
     } catch (error) {
       console.error("Erro ao processar pagamento:", error);
       throw error;
@@ -116,7 +114,6 @@ function PaymentTest() {
             initialization={initialization}
             customization={customization}
             onSubmit={onSubmit}
-            onReady={() => console.log("Brick pronto")}
             onError={(err) => console.error(err)}
           />
         ) : (

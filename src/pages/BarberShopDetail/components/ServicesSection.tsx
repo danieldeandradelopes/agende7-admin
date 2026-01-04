@@ -5,6 +5,7 @@ import {
 } from "@/hooks/integration/services/mutations";
 import useFormatter from "@/hooks/utils/use-formatter";
 import { App } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import classNames from "classnames";
 import { useState } from "react";
 import { FaSave, FaTimes, FaPlus, FaTrash } from "react-icons/fa";
@@ -37,10 +38,35 @@ export default function ServicesSection({
   const handleDeleteService = (id: number) => {
     modal.confirm({
       title: "Confirmar exclusão",
-      content: "Tem certeza que deseja remover este serviço?",
+      icon: (
+        <ExclamationCircleOutlined style={{ color: "var(--color-error)" }} />
+      ),
+      content: (
+        <div style={{ marginTop: 16 }}>
+          <p style={{ marginBottom: 0, fontSize: 14, lineHeight: 1.5 }}>
+            Tem certeza que deseja remover este serviço? Esta ação não pode ser
+            desfeita.
+          </p>
+        </div>
+      ),
       okText: "Sim, remover",
       cancelText: "Cancelar",
-      okButtonProps: { danger: true },
+      okButtonProps: {
+        danger: true,
+        style: {
+          backgroundColor: "var(--color-error)",
+          borderColor: "var(--color-error)",
+        },
+      },
+      cancelButtonProps: {
+        style: {
+          backgroundColor: "transparent",
+          borderColor: "var(--color-border)",
+          color: "var(--color-text-primary)",
+        },
+      },
+      width: 480,
+      centered: true,
       onOk: () => {
         deleteService(id);
       },

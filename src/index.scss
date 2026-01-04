@@ -51,6 +51,92 @@
   [class*="ant-table-row"] {
     cursor: pointer;
   }
+
+  // ===== MODAL STYLES =====
+  .ant-modal {
+    .ant-modal-content {
+      background-color: var(--card-background) !important;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .ant-modal-header {
+      background-color: transparent;
+      border-bottom: 1px solid var(--color-border);
+      padding: 20px 24px;
+      border-radius: 12px 12px 0 0;
+
+      .ant-modal-title {
+        color: var(--color-text-primary);
+        font-size: 18px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+    }
+
+    .ant-modal-body {
+      padding: 24px;
+      color: var(--color-text-primary);
+
+      p {
+        color: var(--color-text-secondary);
+        margin: 0;
+      }
+    }
+
+    .ant-modal-footer {
+      border-top: 1px solid var(--color-border);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+
+      .ant-btn {
+        height: 40px;
+        padding: 0 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+
+        &.ant-btn-primary {
+          background-color: var(--color-error);
+          border-color: var(--color-error);
+
+          &:hover {
+            background-color: #d43f3f;
+            border-color: #d43f3f;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(241, 90, 99, 0.3);
+          }
+        }
+
+        &.ant-btn-default {
+          &:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            transform: translateY(-1px);
+          }
+        }
+      }
+    }
+
+    .ant-modal-close {
+      color: var(--color-text-secondary);
+
+      &:hover {
+        color: var(--color-text-primary);
+      }
+    }
+  }
+
+  // Modal mask (backdrop)
+  .ant-modal-mask {
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+  }
 }
 
 body {

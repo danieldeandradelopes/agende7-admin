@@ -11,6 +11,7 @@ import useFormatter from "@/hooks/utils/use-formatter";
 import { FormProvider } from "@/libs/form/FormProvider";
 import { useZodForm } from "@/libs/form/useZodForm";
 import { App } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import classNames from "classnames";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
@@ -35,7 +36,6 @@ export default function SubscriptionsSection({
 
   const handleAddSubscription = async (data: CreateSubscriptionType) => {
     try {
-      console.log("Dados do formulário:", data);
       await createSubscription({ ...data, barbershop_id: barbershopId });
       setShowAddForm(false);
       form.reset();
@@ -47,10 +47,35 @@ export default function SubscriptionsSection({
   const handleDeleteSubscription = (id: number) => {
     modal.confirm({
       title: "Confirmar exclusão",
-      content: "Tem certeza que deseja remover esta subscription?",
+      icon: (
+        <ExclamationCircleOutlined style={{ color: "var(--color-error)" }} />
+      ),
+      content: (
+        <div style={{ marginTop: 16 }}>
+          <p style={{ marginBottom: 0, fontSize: 14, lineHeight: 1.5 }}>
+            Tem certeza que deseja remover esta assinatura? Esta ação não pode
+            ser desfeita.
+          </p>
+        </div>
+      ),
       okText: "Sim, remover",
       cancelText: "Cancelar",
-      okButtonProps: { danger: true },
+      okButtonProps: {
+        danger: true,
+        style: {
+          backgroundColor: "var(--color-error)",
+          borderColor: "var(--color-error)",
+        },
+      },
+      cancelButtonProps: {
+        style: {
+          backgroundColor: "transparent",
+          borderColor: "var(--color-border)",
+          color: "var(--color-text-primary)",
+        },
+      },
+      width: 480,
+      centered: true,
       onOk: () => {
         deleteSubscription(id);
       },

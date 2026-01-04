@@ -23,8 +23,6 @@ import ManifestSection from "./components/ManifestSection";
 import { updateBarberShopSchema, UpdateBarberShopType } from "./schema";
 import s from "./styles.module.scss";
 
-// Componentes de seção foram movidos para ./components/
-
 const items = (
   form: UseFormReturn<UpdateBarberShopType>,
   handleSubmit: (data: UpdateBarberShopType) => void,
@@ -375,18 +373,18 @@ const items = (
   },
   {
     key: "2",
-    label: "Addons que possui",
-    children: <AddonsSection barbershopId={barbershop.id} />,
-  },
-  {
-    key: "3",
     label: "Plano atual",
     children: <CurrentPlanSection barbershopId={barbershop.id} />,
   },
   {
-    key: "4",
+    key: "3",
     label: "Subscriptions e Subscription Addons",
     children: <SubscriptionsSection barbershopId={barbershop.id} />,
+  },
+  {
+    key: "4",
+    label: "Addons que possui",
+    children: <AddonsSection barbershopId={barbershop.id} />,
   },
   {
     key: "5",
@@ -418,10 +416,6 @@ function BarberShopDetail() {
   const barbershopId = id ? parseInt(id, 10) : 0;
   const { data: barbershop, isLoading } = useGetBarbershopById(barbershopId);
   const { mutateAsync: updateBarberShop, isPending } = useUpdateBarberShop();
-
-  const onChange = (key: string | string[]) => {
-    console.log(key);
-  };
 
   const form = useZodForm({
     schema: updateBarberShopSchema,
@@ -551,7 +545,6 @@ function BarberShopDetail() {
           isPending
         )}
         defaultActiveKey={["1"]}
-        onChange={onChange}
       />
     </div>
   );
