@@ -194,9 +194,16 @@ function AddonsSection({ barbershopId }: { barbershopId: number }) {
                   name="addon_id"
                   control={form.control}
                   render={({ field }) => (
-                    <Select {...field} placeholder="Selecione o addon">
+                    <Select
+                      {...field}
+                      placeholder="Selecione o addon"
+                      value={field.value ? String(field.value) : undefined}
+                      onChange={(value) =>
+                        field.onChange(value ? Number(value) : undefined)
+                      }
+                    >
                       {addons?.map((addon) => (
-                        <Option key={addon.id} value={addon.id}>
+                        <Option key={addon.id} value={String(addon.id)}>
                           {addon.name}
                         </Option>
                       ))}
@@ -218,11 +225,18 @@ function AddonsSection({ barbershopId }: { barbershopId: number }) {
                   name="addon_price_id"
                   control={form.control}
                   render={({ field }) => (
-                    <Select {...field} placeholder="Selecione o preço">
+                    <Select
+                      {...field}
+                      placeholder="Selecione o preço"
+                      value={field.value ? String(field.value) : undefined}
+                      onChange={(value) =>
+                        field.onChange(value ? Number(value) : undefined)
+                      }
+                    >
                       {addonPrices
                         ?.filter((ap) => ap.addon_id === form.watch("addon_id"))
                         .map((ap) => (
-                          <Option key={ap.id} value={ap.id}>
+                          <Option key={ap.id} value={String(ap.id)}>
                             {formatMoney(ap.price / 100)} - {ap.billing_cycle}
                           </Option>
                         ))}
@@ -378,9 +392,14 @@ function SubscriptionsSection({ barbershopId }: { barbershopId: number }) {
   const form = useZodForm({ schema: createSubscriptionSchema });
 
   const handleAddSubscription = async (data: CreateSubscriptionType) => {
-    await createSubscription({ ...data, barbershop_id: barbershopId });
-    setShowAddForm(false);
-    form.reset();
+    try {
+      console.log("Dados do formulário:", data);
+      await createSubscription({ ...data, barbershop_id: barbershopId });
+      setShowAddForm(false);
+      form.reset();
+    } catch (error) {
+      console.error("Erro ao criar subscription:", error);
+    }
   };
 
   const cycleLabels: Record<string, string> = {
@@ -471,9 +490,16 @@ function SubscriptionsSection({ barbershopId }: { barbershopId: number }) {
                   name="plan_price_id"
                   control={form.control}
                   render={({ field }) => (
-                    <Select {...field} placeholder="Selecione o plano/preço">
+                    <Select
+                      {...field}
+                      placeholder="Selecione o plano/preço"
+                      value={field.value ? String(field.value) : undefined}
+                      onChange={(value) =>
+                        field.onChange(value ? Number(value) : undefined)
+                      }
+                    >
                       {planPrices?.map((pp) => (
-                        <Option key={pp.id} value={pp.id}>
+                        <Option key={pp.id} value={String(pp.id)}>
                           {formatMoney(pp.price / 100)} -{" "}
                           {cycleLabels[pp.billing_cycle] || pp.billing_cycle}
                         </Option>
@@ -551,8 +577,10 @@ function SubscriptionsSection({ barbershopId }: { barbershopId: number }) {
               <button
                 type="submit"
                 className={classNames(s.formButton, s.primary)}
+                disabled={form.formState.isSubmitting}
               >
-                <FaSave /> Salvar
+                <FaSave />{" "}
+                {form.formState.isSubmitting ? "Salvando..." : "Salvar"}
               </button>
             </div>
           </FormProvider>
@@ -941,7 +969,7 @@ function ManifestSection({ barbershopId }: { barbershopId: number }) {
       >
         <h3 style={{ margin: 0 }}>Manifest</h3>
         {!isEditing && (
-          <button className={s.addButton} onClick={() => setIsEditing(true)}>
+          <button className={s.editButton} onClick={() => setIsEditing(true)}>
             <FaEdit /> Editar
           </button>
         )}

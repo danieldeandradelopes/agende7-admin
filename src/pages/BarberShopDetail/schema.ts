@@ -23,7 +23,6 @@ export const updateBarberShopSchema = z.object({
 export type UpdateBarberShopType = z.infer<typeof updateBarberShopSchema>;
 
 export const createSubscriptionSchema = z.object({
-  barbershop_id: z.number().min(1, "ID da barbearia é obrigatório"),
   plan_price_id: z.number().min(1, "ID do plano/preço é obrigatório"),
   start_date: z.string().min(1, "Data de início é obrigatória"),
   status: z.enum(["active", "past_due", "canceled"]).optional(),
@@ -34,7 +33,6 @@ export const createSubscriptionSchema = z.object({
 export type CreateSubscriptionType = z.infer<typeof createSubscriptionSchema>;
 
 export const createSubscriptionAddonSchema = z.object({
-  subscription_id: z.number().min(1, "ID da subscription é obrigatório"),
   addon_id: z.number().min(1, "ID do addon é obrigatório"),
   addon_price_id: z.number().min(1, "ID do preço do addon é obrigatório"),
   start_date: z.string().min(1, "Data de início é obrigatória"),
