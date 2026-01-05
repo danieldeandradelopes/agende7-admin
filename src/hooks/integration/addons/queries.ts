@@ -2,25 +2,8 @@ import { useAuth } from "@/hooks/utils/use-auth";
 import { api } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 import { ADDONS_KEYS } from "./keys";
-
-// TODO DANIEL: Verificar types
-export interface Addon {
-  id?: number;
-  name: string;
-  slug: string;
-  description?: string;
-  is_active?: boolean;
-  created_at?: string;
-  updated_at?: string;
-}
-
-export interface AddonPrice {
-  id?: number;
-  addon_id: number;
-  billing_cycle: "monthly" | "semiannual" | "yearly";
-  price: number;
-  created_at?: string;
-}
+import Addon from "@/@backend-types/Addon";
+import AddonPrice from "@/@backend-types/AddonPrice";
 
 export const useGetAddons = () => {
   const { getToken } = useAuth();

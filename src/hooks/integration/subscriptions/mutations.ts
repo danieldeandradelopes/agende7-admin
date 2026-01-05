@@ -3,7 +3,7 @@ import { api } from "@/services/api";
 import showNotification from "@/utils/notify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SUBSCRIPTIONS_KEYS } from "./keys";
-import { Subscription } from "./queries";
+import { SubscriptionAdmin } from "@/@backend-types/SubscriptionAdmin";
 
 export interface CreateSubscriptionData {
   barbershop_id: number;
@@ -18,9 +18,9 @@ export const useCreateSubscription = () => {
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
 
-  return useMutation<Subscription, Error, CreateSubscriptionData>({
+  return useMutation<SubscriptionAdmin, Error, CreateSubscriptionData>({
     mutationFn: async (data) => {
-      const response = await api.post<Subscription>({
+      const response = await api.post<SubscriptionAdmin>({
         url: "/subscriptions",
         data,
         headers: {
@@ -48,12 +48,12 @@ export const useUpdateSubscription = () => {
   const queryClient = useQueryClient();
 
   return useMutation<
-    Subscription,
+    SubscriptionAdmin,
     Error,
-    { id: number; data: Partial<Subscription> }
+    { id: number; data: Partial<SubscriptionAdmin> }
   >({
     mutationFn: async ({ id, data }) => {
-      const response = await api.put<Subscription>({
+      const response = await api.put<SubscriptionAdmin>({
         url: `/subscriptions/${id}`,
         data,
         headers: {
