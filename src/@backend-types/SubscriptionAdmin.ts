@@ -1,36 +1,24 @@
-import { Feature } from "./Feature";
+import { SubscriptionStatus } from "./Subscription";
 
-export type SubscriptionStatus = "active" | "past_due" | "canceled";
-
-export interface SubscriptionValidateResponse {
-  status: SubscriptionStatus;
-  expires_at: string;
-  trial_end_date: string;
-  plan_name: string;
-  plan_description: string;
-  plan_price: string;
-  features: Feature[];
-}
-
-export interface SubscriptionProps {
+export interface SubscriptionAdminProps {
   id?: number;
   barbershop_id: number;
   plan_price_id: number;
-  status?: SubscriptionStatus;
+  status: SubscriptionStatus;
   start_date: string;
-  end_date?: string;
-  trial_end_date?: string;
+  end_date: string;
+  trial_end_date: string;
   created_at?: string;
 }
 
-export default class Subscription {
+export class SubscriptionAdmin {
   readonly id?: number;
   readonly barbershop_id: number;
   readonly plan_price_id: number;
-  readonly status?: SubscriptionStatus;
+  readonly status: SubscriptionStatus;
   readonly start_date: string;
-  readonly end_date?: string;
-  readonly trial_end_date?: string;
+  readonly end_date: string;
+  readonly trial_end_date: string;
   readonly created_at?: string;
 
   constructor({
@@ -42,7 +30,7 @@ export default class Subscription {
     end_date,
     trial_end_date,
     created_at,
-  }: SubscriptionProps) {
+  }: SubscriptionAdminProps) {
     this.id = id;
     this.barbershop_id = barbershop_id;
     this.plan_price_id = plan_price_id;

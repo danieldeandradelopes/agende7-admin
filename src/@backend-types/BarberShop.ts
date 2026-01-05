@@ -34,6 +34,8 @@ export interface BarberShopProps {
   document?: string;
   subdomain: string;
   document_type?: string;
+  min_advance_minutes?: number;
+  min_interval_between_customers?: number;
   updated_at?: string;
   created_at?: string;
 }
@@ -55,6 +57,8 @@ export default class BarberShop {
   readonly document?: string;
   readonly subdomain: string;
   readonly document_type?: string;
+  readonly min_advance_minutes?: number;
+  readonly min_interval_between_customers?: number;
   readonly updated_at?: string;
   readonly created_at?: string;
 
@@ -75,6 +79,8 @@ export default class BarberShop {
     email,
     document,
     document_type,
+    min_advance_minutes,
+    min_interval_between_customers,
     updated_at,
     created_at,
   }: BarberShopProps) {
@@ -93,6 +99,8 @@ export default class BarberShop {
     this.email = email;
     this.document = document;
     this.document_type = document_type;
+    this.min_advance_minutes = min_advance_minutes;
+    this.min_interval_between_customers = min_interval_between_customers;
     this.updated_at = updated_at;
     this.created_at = created_at;
     this.auto_approve = auto_approve;

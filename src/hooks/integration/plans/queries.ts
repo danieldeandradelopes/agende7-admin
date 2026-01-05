@@ -1,4 +1,5 @@
 import Plan from "@/@backend-types/Plan";
+import PlanPrice from "@/@backend-types/PlanPrice";
 import { useAuth } from "@/hooks/utils/use-auth";
 import { api } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
@@ -16,6 +17,26 @@ export const useGetPlans = () => {
     queryFn: async () => {
       const response = await api.get<Plan[]>({
         url: `/plans`,
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      });
+
+      return response;
+    },
+    retry: false,
+    enabled: !!getToken(),
+  });
+};
+
+export const useGetPlanPrices = () => {
+  const { getToken } = useAuth();
+
+  return useQuery<PlanPrice[], Error, PlanPrice[]>({
+    queryKey: [PLANS_KEYS.useGetPlanPrices],
+    queryFn: async () => {
+      const response = await api.get<PlanPrice[]>({
+        url: `/plans-price`,
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },

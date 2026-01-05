@@ -13,6 +13,13 @@ import { useEffect, useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
+import AddonsSection from "./components/AddonsSection";
+import CurrentPlanSection from "./components/CurrentPlanSection";
+import SubscriptionsSection from "./components/SubscriptionsSection";
+import ServicesSection from "./components/ServicesSection";
+import WorkingHoursSection from "./components/WorkingHoursSection";
+import BrandingSection from "./components/BrandingSection";
+import ManifestSection from "./components/ManifestSection";
 import { updateBarberShopSchema, UpdateBarberShopType } from "./schema";
 import s from "./styles.module.scss";
 
@@ -366,13 +373,38 @@ const items = (
   },
   {
     key: "2",
-    label: "Horários de funcionamento",
-    children: <p>teste2</p>,
+    label: "Plano atual",
+    children: <CurrentPlanSection barbershopId={barbershop.id} />,
   },
   {
     key: "3",
-    label: "Configurações",
-    children: <p>essee3</p>,
+    label: "Subscriptions e Subscription Addons",
+    children: <SubscriptionsSection barbershopId={barbershop.id} />,
+  },
+  {
+    key: "4",
+    label: "Addons que possui",
+    children: <AddonsSection barbershopId={barbershop.id} />,
+  },
+  {
+    key: "5",
+    label: "Serviços",
+    children: <ServicesSection barbershopId={barbershop.id} />,
+  },
+  {
+    key: "6",
+    label: "Horários de funcionamento",
+    children: <WorkingHoursSection barbershopId={barbershop.id} />,
+  },
+  {
+    key: "7",
+    label: "Branding",
+    children: <BrandingSection barbershopId={barbershop.id} />,
+  },
+  {
+    key: "8",
+    label: "Manifest",
+    children: <ManifestSection barbershopId={barbershop.id} />,
   },
 ];
 
@@ -384,10 +416,6 @@ function BarberShopDetail() {
   const barbershopId = id ? parseInt(id, 10) : 0;
   const { data: barbershop, isLoading } = useGetBarbershopById(barbershopId);
   const { mutateAsync: updateBarberShop, isPending } = useUpdateBarberShop();
-
-  const onChange = (key: string | string[]) => {
-    console.log(key);
-  };
 
   const form = useZodForm({
     schema: updateBarberShopSchema,
@@ -517,7 +545,6 @@ function BarberShopDetail() {
           isPending
         )}
         defaultActiveKey={["1"]}
-        onChange={onChange}
       />
     </div>
   );
