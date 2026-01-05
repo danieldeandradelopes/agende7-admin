@@ -16,6 +16,7 @@ export default function ServicesSection({
 }: {
   barbershopId: number;
 }) {
+  console.log(barbershopId);
   const { modal } = App.useApp();
   const { formatMoney } = useFormatter();
   const { data: services } = useGetServices();

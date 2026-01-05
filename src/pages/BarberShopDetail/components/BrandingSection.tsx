@@ -7,6 +7,7 @@ export default function BrandingSection({
   barbershopId: number;
 }) {
   const { data: branding } = useGetBranding();
+  console.log(barbershopId);
 
   return (
     <div className={s.section}>
