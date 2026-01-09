@@ -3,12 +3,17 @@ import { Feature } from "./Feature";
 export type SubscriptionStatus = "active" | "past_due" | "canceled";
 
 export interface SubscriptionValidateResponse {
+  id: number;
   status: SubscriptionStatus;
   expires_at: string;
   trial_end_date: string;
   plan_name: string;
   plan_description: string;
   plan_price: string;
+  plan_price_id: number;
+  billing_cycle: "monthly" | "semiannual" | "yearly";
+  start_date: string;
+  end_date: string;
   features: Feature[];
 }
 

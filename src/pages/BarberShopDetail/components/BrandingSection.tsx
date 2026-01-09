@@ -1,4 +1,4 @@
-import { useGetBranding } from "@/hooks/integration/branding/queries";
+import { useGetBrandingById } from "@/hooks/integration/branding/queries";
 import s from "../styles.module.scss";
 
 export default function BrandingSection({
@@ -6,17 +6,16 @@ export default function BrandingSection({
 }: {
   barbershopId: number;
 }) {
-  const { data: branding } = useGetBranding();
-  console.log(barbershopId);
+  const { data: branding } = useGetBrandingById(barbershopId);
 
   return (
     <div className={s.section}>
       <h3>Branding</h3>
-      {branding && branding.length > 0 ? (
+      {branding && branding.id ? (
         <div className={s.infoGrid}>
           <div className={s.infoItem}>
             <strong>Nome do Tema</strong>
-            <span>{branding[0].name}</span>
+            <span>{branding.name}</span>
           </div>
         </div>
       ) : (

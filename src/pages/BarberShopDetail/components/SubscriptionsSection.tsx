@@ -34,6 +34,10 @@ export default function SubscriptionsSection({
   const [showAddForm, setShowAddForm] = useState(false);
   const form = useZodForm({ schema: createSubscriptionSchema });
 
+  const planPrice = planPrices?.find(
+    (pp) => pp.id === subscriptions?.plan_price_id
+  );
+
   const handleAddSubscription = async (data: CreateSubscriptionType) => {
     try {
       await createSubscription({ ...data, barbershop_id: barbershopId });
@@ -91,60 +95,53 @@ export default function SubscriptionsSection({
   return (
     <div className={s.section}>
       <h3>Subscriptions</h3>
-      {subscriptions && subscriptions.length === 0 ? (
+      {!subscriptions?.id ? (
         <div className={s.emptyMessage}>
           <p>Nenhuma subscription</p>
         </div>
       ) : (
         <ul className={s.sectionList}>
-          {subscriptions?.map((sub) => {
-            const planPrice = planPrices?.find(
-              (pp) => pp.id === sub.plan_price_id
-            );
-            return (
-              <li key={sub.id}>
-                <div className={s.sectionItem}>
-                  <div>
-                    <strong>Subscription #{sub.id}</strong>
-                    {planPrice && (
-                      <div
-                        style={{
-                          marginTop: "4px",
-                          fontSize: "12px",
-                          color: "var(--color-text-secondary)",
-                        }}
-                      >
-                        {formatMoney(planPrice.price / 100)} -{" "}
-                        {cycleLabels[planPrice.billing_cycle] ||
-                          planPrice.billing_cycle}
-                        {sub.start_date &&
-                          ` • Início: ${safeFormatDate(sub.start_date)}`}
-                        {sub.end_date &&
-                          ` • Fim: ${safeFormatDate(sub.end_date)}`}
-                      </div>
-                    )}
+          <li key={subscriptions?.id}>
+            <div className={s.sectionItem}>
+              <div>
+                <strong>Subscription #{subscriptions?.id}</strong>
+                {planPrice && (
+                  <div
+                    style={{
+                      marginTop: "4px",
+                      fontSize: "12px",
+                      color: "var(--color-text-secondary)",
+                    }}
+                  >
+                    {formatMoney(planPrice.price / 100)} -{" "}
+                    {cycleLabels[planPrice.billing_cycle] ||
+                      planPrice.billing_cycle}
+                    {subscriptions?.start_date &&
+                      ` • Início: ${safeFormatDate(subscriptions?.start_date)}`}
+                    {subscriptions?.end_date &&
+                      ` • Fim: ${safeFormatDate(subscriptions?.end_date)}`}
                   </div>
-                  <span
-                    className={classNames(
-                      s.statusBadge,
-                      s[sub.status || "past_due"]
-                    )}
-                  >
-                    {sub.status || "past_due"}
-                  </span>
-                </div>
-                <div className={s.sectionActions}>
-                  <button
-                    className={classNames(s.actionButton, s.delete)}
-                    onClick={() => handleDeleteSubscription(sub.id!)}
-                    title="Remover subscription"
-                  >
-                    <FaTrash />
-                  </button>
-                </div>
-              </li>
-            );
-          })}
+                )}
+              </div>
+              <span
+                className={classNames(
+                  s.statusBadge,
+                  s[subscriptions?.status || "past_due"]
+                )}
+              >
+                {subscriptions?.status || "past_due"}
+              </span>
+            </div>
+            <div className={s.sectionActions}>
+              <button
+                className={classNames(s.actionButton, s.delete)}
+                onClick={() => handleDeleteSubscription(subscriptions?.id || 0)}
+                title="Remover subscription"
+              >
+                <FaTrash />
+              </button>
+            </div>
+          </li>
         </ul>
       )}
       {!showAddForm && (

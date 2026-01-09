@@ -21,7 +21,7 @@ export const useCreateSubscription = () => {
   return useMutation<SubscriptionAdmin, Error, CreateSubscriptionData>({
     mutationFn: async (data) => {
       const response = await api.post<SubscriptionAdmin>({
-        url: "/subscriptions",
+        url: "/subscriptions/admin",
         data,
         headers: {
           Authorization: `Bearer ${getToken()}`,
@@ -54,7 +54,7 @@ export const useUpdateSubscription = () => {
   >({
     mutationFn: async ({ id, data }) => {
       const response = await api.put<SubscriptionAdmin>({
-        url: `/subscriptions/${id}`,
+        url: `/subscriptions/admin/${id}`,
         data,
         headers: {
           Authorization: `Bearer ${getToken()}`,
@@ -86,7 +86,7 @@ export const useDeleteSubscription = () => {
   return useMutation<void, Error, number>({
     mutationFn: async (id) => {
       await api.delete<void>({
-        url: `/subscriptions/${id}`,
+        url: `/subscriptions/admin/${id}`,
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },

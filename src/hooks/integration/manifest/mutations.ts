@@ -16,7 +16,7 @@ export const useUpdateManifest = () => {
   >({
     mutationFn: async ({ barbershopId, data }) => {
       const response = await api.put<Manifest>({
-        url: `/manifest/${barbershopId}`,
+        url: `/manifest/admin/${barbershopId}`,
         data,
         headers: {
           Authorization: `Bearer ${getToken()}`,

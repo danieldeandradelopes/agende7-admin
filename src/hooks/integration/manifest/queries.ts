@@ -11,7 +11,7 @@ export const useGetManifest = (barbershopId?: number) => {
     queryKey: [MANIFEST_KEYS.useGetManifest, barbershopId],
     queryFn: async () => {
       const response = await api.get<Manifest>({
-        url: `/manifest`,
+        url: `/manifest/admin/${barbershopId}`,
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },

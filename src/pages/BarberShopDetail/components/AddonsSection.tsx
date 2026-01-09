@@ -42,15 +42,15 @@ export default function AddonsSection({
   const [showAddForm, setShowAddForm] = useState(false);
   const form = useZodForm({ schema: createSubscriptionAddonSchema });
 
-  const activeSubscription = subscriptions?.[0];
+  const activeSubscription = subscriptions;
   const { data: subscriptionAddons = [] } =
     useGetSubscriptionAddonsBySubscriptionId(activeSubscription?.id || 0);
 
   const handleAddAddon = async (data: CreateSubscriptionAddonType) => {
-    if (!activeSubscription) return;
+    if (!activeSubscription?.id) return;
     await createSubscriptionAddon({
       ...data,
-      subscription_id: activeSubscription.id!,
+      subscription_id: activeSubscription.id,
     });
     setShowAddForm(false);
     form.reset();

@@ -18,15 +18,12 @@ export default function CurrentPlanSection({
   const { data: planPrices } = useGetPlanPrices();
   const { data: plans } = useGetPlans();
 
-  const activeSubscription = subscriptions?.[0];
-  const planPrice = activeSubscription
-    ? planPrices?.find((pp) => pp.id === activeSubscription.plan_price_id)
-    : null;
-  const plan = planPrice
-    ? plans?.find((p) => p.id === planPrice.plan_id)
-    : null;
+  const planPrice = planPrices?.find(
+    (pp) => pp.id === subscriptions?.plan_price_id
+  );
+  const plan = plans?.find((p) => p.id === planPrice?.plan_id);
 
-  if (!activeSubscription) {
+  if (!subscriptions?.id) {
     return (
       <div className={s.section}>
         <div className={s.emptyMessage}>
@@ -68,21 +65,21 @@ export default function CurrentPlanSection({
             <span
               className={classNames(
                 s.statusBadge,
-                s[activeSubscription.status || "past_due"]
+                s[subscriptions?.status || "past_due"]
               )}
             >
-              {activeSubscription.status || "past_due"}
+              {subscriptions?.status || "past_due"}
             </span>
           </span>
         </div>
         <div className={s.infoItem}>
           <strong>Início</strong>
-          <span>{safeFormatDate(activeSubscription.start_date)}</span>
+          <span>{safeFormatDate(subscriptions?.start_date)}</span>
         </div>
-        {activeSubscription.end_date && (
+        {subscriptions?.end_date && (
           <div className={s.infoItem}>
             <strong>Fim</strong>
-            <span>{safeFormatDate(activeSubscription.end_date)}</span>
+            <span>{safeFormatDate(subscriptions?.end_date)}</span>
           </div>
         )}
       </div>
