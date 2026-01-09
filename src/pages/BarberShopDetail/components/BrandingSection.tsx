@@ -320,6 +320,599 @@ export default function BrandingSection({
               </Wrapper>
             </div>
 
+            {/* Paleta Base */}
+            <h4
+              style={{
+                marginTop: "24px",
+                marginBottom: "16px",
+                fontSize: "16px",
+                fontWeight: 600,
+              }}
+            >
+              Paleta Base
+            </h4>
+            <div className={s.formGridSection}>
+              <div className={s.colorPicker}>
+                <label>Cor Primária:</label>
+                <Controller
+                  name="primary_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Cor Secundária:</label>
+                <Controller
+                  name="secondary_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Cor Terciária:</label>
+                <Controller
+                  name="tertiary_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Cor Quaternária:</label>
+                <Controller
+                  name="quaternary_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Cor de Fundo:</label>
+                <Controller
+                  name="background_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Cor de Superfície:</label>
+                <Controller
+                  name="surface_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Cor de Texto Primária:</label>
+                <Controller
+                  name="text_primary_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Cor de Texto Secundária:</label>
+                <Controller
+                  name="text_secondary_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Cor de Borda:</label>
+                <Controller
+                  name="border_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Cor de Erro:</label>
+                <Controller
+                  name="error_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Cor de Sucesso:</label>
+                <Controller
+                  name="success_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Botões */}
+            <h4
+              style={{
+                marginTop: "24px",
+                marginBottom: "16px",
+                fontSize: "16px",
+                fontWeight: 600,
+              }}
+            >
+              Botões
+            </h4>
+            <div className={s.formGridSection}>
+              <div className={s.colorPicker}>
+                <label>Botão Primário (BG):</label>
+                <Controller
+                  name="btn_primary_bg"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Botão Primário (Texto):</label>
+                <Controller
+                  name="btn_primary_text"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Botão Secundário (BG):</label>
+                <Controller
+                  name="btn_secondary_bg"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Botão Secundário (Texto):</label>
+                <Controller
+                  name="btn_secondary_text"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Botão Terciário (BG):</label>
+                <Controller
+                  name="btn_tertiary_bg"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Botão Terciário (Texto):</label>
+                <Controller
+                  name="btn_tertiary_text"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Botão Quaternário (BG):</label>
+                <Controller
+                  name="btn_quaternary_bg"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Botão Quaternário (Texto):</label>
+                <Controller
+                  name="btn_quaternary_text"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Textos */}
+            <h4
+              style={{
+                marginTop: "24px",
+                marginBottom: "16px",
+                fontSize: "16px",
+                fontWeight: 600,
+              }}
+            >
+              Textos
+            </h4>
+            <div className={s.formGridSection}>
+              <div className={s.colorPicker}>
+                <label>Cor de Título:</label>
+                <Controller
+                  name="heading_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Cor de Subtítulo:</label>
+                <Controller
+                  name="subheading_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Texto Padrão:</label>
+                <Controller
+                  name="text_default"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Texto Muted:</label>
+                <Controller
+                  name="text_muted"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Cor de Link:</label>
+                <Controller
+                  name="link_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Cor de Link (Hover):</label>
+                <Controller
+                  name="link_hover_color"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Inputs */}
+            <h4
+              style={{
+                marginTop: "24px",
+                marginBottom: "16px",
+                fontSize: "16px",
+                fontWeight: 600,
+              }}
+            >
+              Inputs
+            </h4>
+            <div className={s.formGridSection}>
+              <div className={s.colorPicker}>
+                <label>Input (BG):</label>
+                <Controller
+                  name="input_bg"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Input (Texto):</label>
+                <Controller
+                  name="input_text"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Input (Borda):</label>
+                <Controller
+                  name="input_border"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Input (Placeholder):</label>
+                <Controller
+                  name="input_placeholder"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Input (Focus Borda):</label>
+                <Controller
+                  name="input_focus_border"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Containers */}
+            <h4
+              style={{
+                marginTop: "24px",
+                marginBottom: "16px",
+                fontSize: "16px",
+                fontWeight: 600,
+              }}
+            >
+              Containers
+            </h4>
+            <div className={s.formGridSection}>
+              <div className={s.colorPicker}>
+                <label>App Background:</label>
+                <Controller
+                  name="app_background"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Card Background:</label>
+                <Controller
+                  name="card_background"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Card Borda:</label>
+                <Controller
+                  name="card_border"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Card Sombra:</label>
+                <Controller
+                  name="card_shadow"
+                  control={form.control}
+                  render={({ field }) => (
+                    <input
+                      type="text"
+                      className={s.formInput}
+                      placeholder="Ex: 0 2px 8px rgba(0,0,0,0.1)"
+                      {...field}
+                    />
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Drawer/Sidebar */}
+            <h4
+              style={{
+                marginTop: "24px",
+                marginBottom: "16px",
+                fontSize: "16px",
+                fontWeight: 600,
+              }}
+            >
+              Drawer/Sidebar
+            </h4>
+            <div className={s.formGridSection}>
+              <div className={s.colorPicker}>
+                <label>Drawer (BG):</label>
+                <Controller
+                  name="drawer_bg"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Drawer (Texto):</label>
+                <Controller
+                  name="drawer_text"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Drawer (Borda):</label>
+                <Controller
+                  name="drawer_border"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Drawer (Hover BG):</label>
+                <Controller
+                  name="drawer_hover_bg"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+              <div className={s.colorPicker}>
+                <label>Drawer (Active BG):</label>
+                <Controller
+                  name="drawer_active_bg"
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <input type="color" {...field} />
+                      {field.value && <span>{field.value}</span>}
+                    </>
+                  )}
+                />
+              </div>
+            </div>
+
             <div className={s.formButtons}>
               <button
                 type="button"
