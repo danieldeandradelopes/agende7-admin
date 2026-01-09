@@ -4,12 +4,12 @@ import { BRANDING_KEYS } from "./keys";
 import Branding from "@/@backend-types/Branding";
 import { useAuth } from "@/hooks/utils/use-auth";
 
-export const useGetBranding = () => {
+export const useGetBranding = (barbershopId: number) => {
   return useQuery<Branding[], Error, Branding[]>({
     queryKey: [BRANDING_KEYS.branding],
     queryFn: async () => {
       const response = await api.get<Branding[]>({
-        url: `/branding`,
+        url: `/branding/admin/${barbershopId}`,
       });
 
       return response;

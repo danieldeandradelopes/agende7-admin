@@ -88,3 +88,58 @@ export const updateManifestSchema = z.object({
 });
 
 export type UpdateManifestType = z.infer<typeof updateManifestSchema>;
+
+export const updateBrandingSchema = z.object({
+  name: z.string().min(1, "Nome é obrigatório"),
+  theme: z.enum(["light", "dark", "custom"]).optional(),
+  // Paleta base
+  primary_color: z.string().optional(),
+  secondary_color: z.string().optional(),
+  tertiary_color: z.string().optional(),
+  quaternary_color: z.string().optional(),
+  background_color: z.string().optional(),
+  surface_color: z.string().optional(),
+  text_primary_color: z.string().optional(),
+  text_secondary_color: z.string().optional(),
+  border_color: z.string().optional(),
+  error_color: z.string().optional(),
+  success_color: z.string().optional(),
+  // Botões
+  btn_primary_bg: z.string().optional(),
+  btn_primary_text: z.string().optional(),
+  btn_secondary_bg: z.string().optional(),
+  btn_secondary_text: z.string().optional(),
+  btn_tertiary_bg: z.string().optional(),
+  btn_tertiary_text: z.string().optional(),
+  btn_quaternary_bg: z.string().optional(),
+  btn_quaternary_text: z.string().optional(),
+  // Textos
+  heading_color: z.string().optional(),
+  subheading_color: z.string().optional(),
+  text_default: z.string().optional(),
+  text_muted: z.string().optional(),
+  link_color: z.string().optional(),
+  link_hover_color: z.string().optional(),
+  // Inputs
+  input_bg: z.string().optional(),
+  input_text: z.string().optional(),
+  input_border: z.string().optional(),
+  input_placeholder: z.string().optional(),
+  input_focus_border: z.string().optional(),
+  // Containers
+  app_background: z.string().optional(),
+  card_background: z.string().optional(),
+  card_border: z.string().optional(),
+  card_shadow: z.string().optional(),
+  // Drawer/Sidebar
+  drawer_bg: z.string().optional(),
+  drawer_text: z.string().optional(),
+  drawer_border: z.string().optional(),
+  drawer_hover_bg: z.string().optional(),
+  drawer_active_bg: z.string().optional(),
+  // Assets
+  logo: z.string().optional(),
+  favicon: z.string().optional(),
+});
+
+export type UpdateBrandingType = z.infer<typeof updateBrandingSchema>;
