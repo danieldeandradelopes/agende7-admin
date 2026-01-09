@@ -227,8 +227,7 @@ export default function BrandingSection({
         </div>
         {isEditing ? (
           <FormProvider form={form} onSubmit={handleSubmit}>
-            {/* O formulário completo será renderizado abaixo, reutilizando o mesmo código */}
-            {/* Por enquanto, vou duplicar a estrutura principal */}
+            {/* Informações Básicas */}
             <div className={s.formGridSection}>
               <Wrapper<UpdateBrandingType>
                 name="name"
@@ -269,6 +268,53 @@ export default function BrandingSection({
                       <option value="dark">Escuro</option>
                       <option value="custom">Personalizado</option>
                     </select>
+                  )}
+                />
+              </Wrapper>
+            </div>
+
+            {/* Assets */}
+            <div className={s.formGridSection}>
+              <Wrapper<UpdateBrandingType>
+                name="logo"
+                label="Logo (URL):"
+                error={Boolean(form.formState.errors.logo)}
+                errorMessage={
+                  form.formState.errors.logo?.message as string | undefined
+                }
+              >
+                <Controller
+                  name="logo"
+                  control={form.control}
+                  render={({ field }) => (
+                    <input
+                      type="text"
+                      className={s.formInput}
+                      placeholder="URL do logo"
+                      {...field}
+                    />
+                  )}
+                />
+              </Wrapper>
+
+              <Wrapper<UpdateBrandingType>
+                name="favicon"
+                label="Favicon (URL):"
+                error={Boolean(form.formState.errors.favicon)}
+                errorMessage={
+                  form.formState.errors.favicon?.message as string | undefined
+                }
+              >
+                <Controller
+                  name="favicon"
+                  control={form.control}
+                  render={({ field }) => (
+                    <input
+                      type="text"
+                      className={s.formInput}
+                      placeholder="URL do favicon"
+                      {...field}
+                    />
                   )}
                 />
               </Wrapper>
