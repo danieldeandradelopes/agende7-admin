@@ -103,7 +103,6 @@ export const useDeleteSubscriptionAddon = () => {
     mutationKey: [SUBSCRIPTION_ADDONS_KEYS.useDeleteSubscriptionAddon],
     onError: (err) => {
       console.error("Erro ao deletar subscription addon:", err);
-      showNotification("Erro ao deletar subscription addon");
     },
     onSuccess: (_, variables) => {
       showNotification("Subscription addon deletado com sucesso");
