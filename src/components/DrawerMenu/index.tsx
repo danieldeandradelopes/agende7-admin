@@ -11,7 +11,6 @@ import { Avatar, Button, Drawer, Menu } from "antd";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import { useState } from "react";
 import s from "./menu-drawer.module.scss";
-import { FaWhatsapp } from "react-icons/fa";
 
 function DrawerMenu() {
   const [open, setOpen] = useState(false);
@@ -60,12 +59,6 @@ function DrawerMenu() {
       icon: <UserOutlined />,
       label: "Usuários",
       onClick: () => handleNavigate("/users"),
-    },
-    {
-      key: "whatsapp-login",
-      icon: <FaWhatsapp />,
-      label: "Whatsapp Login",
-      onClick: () => handleNavigate("/whatsapp-login"),
     },
   ];
 

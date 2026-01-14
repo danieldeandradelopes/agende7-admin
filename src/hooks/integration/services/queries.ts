@@ -15,14 +15,14 @@ export default class Service {
   ) {}
 }
 
-export const useGetServices = () => {
+export const useGetServices = (barberShopId: number) => {
   const { getToken } = useAuth();
 
   return useQuery<Service[], Error, Service[]>({
     queryKey: [SERVICES_KEYS.services],
     queryFn: async () => {
       const response = await api.get<Service[]>({
-        url: "/services",
+        url: `/services/admin/${barberShopId}`,
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },

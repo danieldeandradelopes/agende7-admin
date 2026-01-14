@@ -1,14 +1,14 @@
-import { useGetServices } from "@/hooks/integration/services/queries";
 import {
   useCreateService,
   useDeleteService,
 } from "@/hooks/integration/services/mutations";
+import { useGetServices } from "@/hooks/integration/services/queries";
 import useFormatter from "@/hooks/utils/use-formatter";
-import { App } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { App } from "antd";
 import classNames from "classnames";
 import { useState } from "react";
-import { FaSave, FaTimes, FaPlus, FaTrash } from "react-icons/fa";
+import { FaPlus, FaSave, FaTimes, FaTrash } from "react-icons/fa";
 import s from "../styles.module.scss";
 
 export default function ServicesSection({
@@ -19,7 +19,7 @@ export default function ServicesSection({
   console.log(barbershopId);
   const { modal } = App.useApp();
   const { formatMoney } = useFormatter();
-  const { data: services } = useGetServices();
+  const { data: services } = useGetServices(barbershopId);
   const { mutateAsync: createService } = useCreateService();
   const { mutateAsync: deleteService } = useDeleteService();
   const [showAddForm, setShowAddForm] = useState(false);
