@@ -26,8 +26,18 @@ export const useGetReportsDashboard = (filters?: DashboardFilters) => {
     return queryString ? `?${queryString}` : "";
   };
 
+  // Serializar filtros para garantir que a query key seja estável
+  const filtersKey = filters
+    ? JSON.stringify({
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+        barbershopId: filters.barbershopId,
+        scheduleStatus: filters.scheduleStatus?.sort().join(","),
+      })
+    : undefined;
+
   return useQuery<DashboardReports, Error, DashboardReports>({
-    queryKey: [REPORTS_KEYS.useGetReportsDashboard, filters],
+    queryKey: [REPORTS_KEYS.useGetReportsDashboard, filtersKey],
     queryFn: async () => {
       const response = await api.get<DashboardReports>({
         url: `/dashboard-reports${buildQueryString()}`,

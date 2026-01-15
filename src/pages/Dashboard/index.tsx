@@ -31,10 +31,11 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { format } from "date-fns";
+import { useMemo } from "react";
 
 function Dashboard() {
-  const { getApiFilters } = useDashboardFilters();
-  const apiFilters = getApiFilters();
+  const { filters, getApiFilters } = useDashboardFilters();
+  const apiFilters = useMemo(() => getApiFilters(), [filters]);
   const { data: reportsDashboard } = useGetReportsDashboard(apiFilters);
 
   const getColor = (trend: string) => {

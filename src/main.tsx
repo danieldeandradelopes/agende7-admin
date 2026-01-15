@@ -6,7 +6,6 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import AppWithUpdater from "./components/AppWithUpdater/index.tsx";
 import { BrandingProvider, useBrandingContext } from "./context/branding.tsx";
 import { GlobalProvider } from "./context/global.tsx";
 import "./index.scss";
@@ -37,7 +36,6 @@ function Main() {
           <StrictMode>
             <BrowserRouter>
               <AntdApp>
-                <AppWithUpdater />
                 <MainRoutes />
                 <ToastContainer
                   position="top-right"
