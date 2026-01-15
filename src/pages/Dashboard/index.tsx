@@ -11,7 +11,10 @@ import {
 } from "@ant-design/icons";
 import Divisor from "@/components/design/Divisor";
 import { useGetReportsDashboard } from "@/hooks/integration/reports/queries";
-import { useDashboardFilters } from "@/hooks/integration/reports/useDashboardFilters";
+import {
+  DashboardFiltersProvider,
+  useDashboardFiltersContext,
+} from "@/context/dashboardFilters";
 import DashboardFilters from "./components/DashboardFilters";
 import {
   LineChart,
@@ -31,11 +34,23 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { format } from "date-fns";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
-function Dashboard() {
-  const { filters, getApiFilters } = useDashboardFilters();
-  const apiFilters = useMemo(() => getApiFilters(), [filters]);
+function DashboardContent() {
+  const { filters, getApiFilters } = useDashboardFiltersContext();
+  const apiFilters = useMemo(
+    () => getApiFilters(),
+    [
+      JSON.stringify({
+        periodType: filters.periodType,
+        barbershopId: filters.barbershopId,
+        scheduleStatus: filters.scheduleStatus,
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+      }),
+    ]
+  );
+
   const { data: reportsDashboard } = useGetReportsDashboard(apiFilters);
 
   const getColor = (trend: string) => {
@@ -116,6 +131,15 @@ function Dashboard() {
         },
       ].filter((item) => item.value > 0)
     : [];
+
+  useEffect(() => {
+    console.log(filters, "meus filtros");
+  }, [
+    filters.barbershopId,
+    filters.scheduleStatus,
+    filters.startDate,
+    filters.endDate,
+  ]);
 
   return (
     <div className={s.container}>
@@ -547,6 +571,14 @@ function Dashboard() {
         </div>
       </div>
     </div>
+  );
+}
+
+function Dashboard() {
+  return (
+    <DashboardFiltersProvider>
+      <DashboardContent />
+    </DashboardFiltersProvider>
   );
 }
 

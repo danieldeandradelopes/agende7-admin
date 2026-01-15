@@ -1,5 +1,5 @@
 import { useGetBarbershops } from "@/hooks/integration/barbershops/queries";
-import { useDashboardFilters } from "@/hooks/integration/reports/useDashboardFilters";
+import { useDashboardFiltersContext } from "@/context/dashboardFilters";
 import { Button, Card, DatePicker, Select } from "antd";
 import { RangePickerProps } from "antd/es/date-picker";
 import dayjs, { Dayjs } from "dayjs";
@@ -27,7 +27,7 @@ const STATUS_OPTIONS = [
 ];
 
 export default function DashboardFilters() {
-  const { filters, updateFilters, resetFilters } = useDashboardFilters();
+  const { filters, updateFilters, resetFilters } = useDashboardFiltersContext();
   const { data: barbershops } = useGetBarbershops();
 
   const handlePeriodChange = (value: string) => {

@@ -1,3 +1,4 @@
+import constate from "constate";
 import { useCustomLocalStorage } from "@/hooks/utils/use-custom-local-storage";
 import { DashboardFilters } from "@/@backend-types/Reports";
 
@@ -23,7 +24,7 @@ const DEFAULT_FILTERS: UseDashboardFilters = {
 
 const STORAGE_KEY = "dashboard_filters";
 
-export function useDashboardFilters() {
+function useDashboardFilters() {
   const [filters, setFilters, removeFilters] =
     useCustomLocalStorage<UseDashboardFilters>(STORAGE_KEY, DEFAULT_FILTERS);
 
@@ -90,3 +91,6 @@ export function useDashboardFilters() {
     getApiFilters,
   };
 }
+
+export const [DashboardFiltersProvider, useDashboardFiltersContext] =
+  constate(useDashboardFilters);
