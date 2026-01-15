@@ -9,13 +9,38 @@
   flex-direction: column;
   padding-bottom: 24px;
 
+  h3 {
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
   .line {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
 
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
     @media (max-width: 768px) {
       grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  .chartsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    .chartCard {
+      min-height: 400px;
     }
   }
 }

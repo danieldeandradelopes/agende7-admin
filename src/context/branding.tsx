@@ -1,7 +1,7 @@
 import Branding from "@/@backend-types/Branding";
 import { useCustomLocalStorage } from "@/hooks/utils/use-custom-local-storage";
 import constate from "constate";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { BrandingUI } from "./types";
 
 function brandingToUI(branding: Branding): BrandingUI {
@@ -141,81 +141,36 @@ function useBranding() {
     setCurrentBranding(selected);
   }, [theme, brandings]);
 
-  function handleThemeDetailsApply() {
+  // Aplica o tema na inicialização ANTES da renderização
+  useLayoutEffect(() => {
     const root = document.documentElement;
-    const b = currentBranding;
-
-    const setCSS = (key: string, value?: string) => {
-      if (value) root.style.setProperty(key, value);
-    };
-
-    setCSS("--color-primary", b.primaryColor);
-    setCSS("--color-secondary", b.secondaryColor);
-    setCSS("--color-tertiary", b.tertiaryColor);
-    setCSS("--color-quaternary", b.quaternaryColor);
-    setCSS("--color-background", b.backgroundColor);
-    setCSS("--color-surface", b.surfaceColor);
-    setCSS("--color-text-primary", b.textPrimaryColor);
-    setCSS("--color-text-secondary", b.textSecondaryColor);
-    setCSS("--color-border", b.borderColor);
-    setCSS("--color-error", b.errorColor);
-    setCSS("--color-success", b.successColor);
-
-    setCSS("--btn-primary-bg", b.btnPrimaryBg);
-    setCSS("--btn-primary-text", b.btnPrimaryText);
-    setCSS("--btn-secondary-bg", b.btnSecondaryBg);
-    setCSS("--btn-secondary-text", b.btnSecondaryText);
-    setCSS("--btn-tertiary-bg", b.btnTertiaryBg);
-    setCSS("--btn-tertiary-text", b.btnTertiaryText);
-    setCSS("--btn-quaternary-bg", b.btnQuaternaryBg);
-    setCSS("--btn-quaternary-text", b.btnQuaternaryText);
-
-    setCSS("--heading-color", b.headingColor);
-    setCSS("--subheading-color", b.subheadingColor);
-    setCSS("--text-default", b.textDefault);
-    setCSS("--text-muted", b.textMuted);
-    setCSS("--link-color", b.linkColor);
-    setCSS("--link-hover-color", b.linkHoverColor);
-
-    setCSS("--input-bg", b.inputBg);
-    setCSS("--input-text", b.inputText);
-    setCSS("--input-border", b.inputBorder);
-    setCSS("--input-placeholder", b.inputPlaceholder);
-    setCSS("--input-focus-border", b.inputFocusBorder);
-
-    setCSS("--app-background", b.appBackground);
-    setCSS("--card-background", b.cardBackground);
-    setCSS("--card-border", b.cardBorder);
-    setCSS("--card-shadow", b.cardShadow);
-
-    setCSS("--drawer-bg", b.drawerBg);
-    setCSS("--drawer-text", b.drawerText);
-    setCSS("--drawer-border", b.drawerBorder);
-    setCSS("--drawer-hover-bg", b.drawerHoverBg);
-    setCSS("--drawer-active-bg", b.drawerActiveBg);
-
-    if (b.logo) setCSS("--logo-url", `url(${b.logo})`);
-
-    if (b.favicon) {
-      const favicon = document.querySelector('link[rel="icon"]');
-      if (favicon) {
-        (favicon as HTMLLinkElement).href = b.favicon;
-      } else {
-        const link = document.createElement("link");
-        link.rel = "icon";
-        link.href = b.favicon;
-        document.head.appendChild(link);
-      }
-    }
+    const body = document.body;
 
     if (theme) {
       root.setAttribute("data-theme", theme);
-      document.body.setAttribute("data-theme", theme);
+      body.setAttribute("data-theme", theme);
     }
-  }
+  }, [theme]);
 
+  // Aplica logo e favicon quando disponíveis
   useEffect(() => {
-    if (currentBranding) handleThemeDetailsApply();
+    const root = document.documentElement;
+
+    if (currentBranding?.logo) {
+      root.style.setProperty("--logo-url", `url(${currentBranding.logo})`);
+    }
+
+    if (currentBranding?.favicon) {
+      const favicon = document.querySelector('link[rel="icon"]');
+      if (favicon) {
+        (favicon as HTMLLinkElement).href = currentBranding.favicon;
+      } else {
+        const link = document.createElement("link");
+        link.rel = "icon";
+        link.href = currentBranding.favicon;
+        document.head.appendChild(link);
+      }
+    }
   }, [currentBranding]);
 
   return {

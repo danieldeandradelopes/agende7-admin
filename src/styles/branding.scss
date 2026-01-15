@@ -258,33 +258,111 @@ h6 {
 // ===== TEMAS =====
 
 // Tema Claro
+[data-theme="light"],
 .theme-light {
+  --color-primary: #7359f8;
+  --color-secondary: #6f65b1;
+  --color-tertiary: #e9ecef;
+  --color-quaternary: #dee2e6;
   --color-background: #ffffff;
   --color-surface: #f8f9fa;
   --color-text-primary: #0e0d11;
   --color-text-secondary: #4b4a4e;
   --color-border: #e9ecef;
+  --color-error: #f15a63;
+  --color-success: #3a8636;
+
+  // Botões
+  --btn-primary-bg: #7359f8;
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: #6f65b1;
+  --btn-secondary-text: #ffffff;
+  --btn-tertiary-bg: #e9ecef;
+  --btn-tertiary-text: #0e0d11;
+  --btn-quaternary-bg: #dee2e6;
+  --btn-quaternary-text: #0e0d11;
+
+  // Textos
+  --heading-color: #0e0d11;
+  --subheading-color: #4b4a4e;
+  --text-default: #0e0d11;
+  --text-muted: #666666;
+  --link-color: #7359f8;
+  --link-hover-color: #6f65b1;
+
+  // Inputs
   --input-bg: #ffffff;
+  --input-text: #0e0d11;
+  --input-border: #e9ecef;
+  --input-placeholder: #666666;
+  --input-focus-border: #7359f8;
+
+  // Containers
+  --app-background: #ffffff;
   --card-background: #ffffff;
+  --card-border: #e9ecef;
+  --card-shadow: rgba(0, 0, 0, 0.05);
+
+  // Drawer
   --drawer-bg: #f8f9fa;
+  --drawer-text: #0e0d11;
   --drawer-border: #e9ecef;
   --drawer-hover-bg: #e9ecef;
-  --card-shadow: rgba(0, 0, 0, 0.05);
+  --drawer-active-bg: #7359f8;
 }
 
 // Tema Escuro (padrão)
+[data-theme="dark"],
 .theme-dark {
+  --color-primary: #7359f8;
+  --color-secondary: #6f65b1;
+  --color-tertiary: #302a4f;
+  --color-quaternary: #28243b;
   --color-background: #0e0d11;
   --color-surface: #242229;
   --color-text-primary: #ffffff;
   --color-text-secondary: #979494;
   --color-border: #4b4a4e;
+  --color-error: #f15a63;
+  --color-success: #3a8636;
+
+  // Botões
+  --btn-primary-bg: #7359f8;
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: #6f65b1;
+  --btn-secondary-text: #ffffff;
+  --btn-tertiary-bg: #302a4f;
+  --btn-tertiary-text: #ffffff;
+  --btn-quaternary-bg: #28243b;
+  --btn-quaternary-text: #ffffff;
+
+  // Textos
+  --heading-color: #ffffff;
+  --subheading-color: #979494;
+  --text-default: #ffffff;
+  --text-muted: #666666;
+  --link-color: #7359f8;
+  --link-hover-color: #6f65b1;
+
+  // Inputs
   --input-bg: #242229;
+  --input-text: #ffffff;
+  --input-border: #4b4a4e;
+  --input-placeholder: #666666;
+  --input-focus-border: #7359f8;
+
+  // Containers
+  --app-background: #0e0d11;
   --card-background: #242229;
+  --card-border: #4b4a4e;
+  --card-shadow: rgba(0, 0, 0, 0.1);
+
+  // Drawer
   --drawer-bg: #242229;
+  --drawer-text: #ffffff;
   --drawer-border: #4b4a4e;
   --drawer-hover-bg: #302a4f;
-  --card-shadow: rgba(0, 0, 0, 0.1);
+  --drawer-active-bg: #7359f8;
 }
 
 // ===== RESPONSIVIDADE =====
