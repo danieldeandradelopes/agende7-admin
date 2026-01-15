@@ -11,6 +11,8 @@ import {
 } from "@ant-design/icons";
 import Divisor from "@/components/design/Divisor";
 import { useGetReportsDashboard } from "@/hooks/integration/reports/queries";
+import { useDashboardFilters } from "@/hooks/integration/reports/useDashboardFilters";
+import DashboardFilters from "./components/DashboardFilters";
 import {
   LineChart,
   Line,
@@ -31,7 +33,9 @@ import {
 import { format } from "date-fns";
 
 function Dashboard() {
-  const { data: reportsDashboard } = useGetReportsDashboard();
+  const { getApiFilters } = useDashboardFilters();
+  const apiFilters = getApiFilters();
+  const { data: reportsDashboard } = useGetReportsDashboard(apiFilters);
 
   const getColor = (trend: string) => {
     if (trend === "same") return "#db9020";
@@ -115,6 +119,8 @@ function Dashboard() {
   return (
     <div className={s.container}>
       <HeaderPage title="Dashboard" />
+
+      <DashboardFilters />
 
       <div className={s.content}>
         <h3>Agendamentos</h3>

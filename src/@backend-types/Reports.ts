@@ -64,6 +64,13 @@ export interface TimeSeriesData {
   users_last_12_months: TimeSeriesDataPoint[];
 }
 
+export interface DashboardFilters {
+  startDate?: string;
+  endDate?: string;
+  barbershopId?: number;
+  scheduleStatus?: string[];
+}
+
 export interface DashboardReports {
   new_users: DashboardPeriodComparison;
   schedules: DashboardPeriodComparison;

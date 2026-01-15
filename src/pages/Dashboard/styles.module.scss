@@ -44,3 +44,119 @@
     }
   }
 }
+
+.filtersCard {
+  margin-bottom: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .filtersCardTitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-text);
+
+    svg {
+      font-size: 18px;
+      color: var(--color-primary, #1890ff);
+    }
+  }
+
+  .resetButton {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+      width: 100%;
+      margin-top: 12px;
+    }
+  }
+
+  .filtersGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    align-items: start;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 480px) {
+      gap: 12px;
+    }
+  }
+
+  .filterItem {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0; // Permite que o item encolha
+
+    &.filterItemFull {
+      grid-column: 1 / -1;
+
+      @media (max-width: 768px) {
+        grid-column: 1;
+      }
+    }
+  }
+
+  .filterLabel {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.85;
+  }
+
+  .filterSelect {
+    width: 100%;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: var(--color-primary, #1890ff);
+    }
+
+    &:focus,
+    &.ant-select-focused {
+      border-color: var(--color-primary, #1890ff);
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+    }
+  }
+
+  .filterDateRange {
+    width: 100%;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: var(--color-primary, #1890ff);
+    }
+
+    &:focus,
+    &.ant-picker-focused {
+      border-color: var(--color-primary, #1890ff);
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+    }
+  }
+}
