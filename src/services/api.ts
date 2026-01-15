@@ -42,6 +42,34 @@ interface RefreshTokenResponse {
 let isRefreshing = false;
 let refreshPromise: Promise<string> | null = null;
 
+// Função auxiliar para obter o token do localStorage
+function getTokenFromStorage(): string | null {
+  try {
+    const authData = localStorage.getItem("auth");
+    if (authData) {
+      const parsedAuth = JSON.parse(authData);
+      return parsedAuth.token || null;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+// Função auxiliar para atualizar o token no localStorage
+function updateTokenInStorage(newToken: string): void {
+  try {
+    const authData = localStorage.getItem("auth");
+    if (authData) {
+      const parsedAuth = JSON.parse(authData);
+      parsedAuth.token = newToken;
+      localStorage.setItem("auth", JSON.stringify(parsedAuth));
+    }
+  } catch {
+    // Se não conseguir atualizar, ignora
+  }
+}
+
 async function refreshToken(): Promise<string> {
   if (isRefreshing && refreshPromise) {
     return refreshPromise;
@@ -64,13 +92,7 @@ async function refreshToken(): Promise<string> {
       }
 
       const data: RefreshTokenResponse = await response.json();
-
-      const authData = localStorage.getItem("auth");
-      if (authData) {
-        const parsedAuth = JSON.parse(authData);
-        parsedAuth.token = data.accessToken;
-        localStorage.setItem("auth", JSON.stringify(parsedAuth));
-      }
+      updateTokenInStorage(data.accessToken);
 
       return data.accessToken;
     } catch (error) {
@@ -94,8 +116,10 @@ async function makeRequestWithRetry<T>(
     const response = await requestFn();
 
     if (response.status === 401) {
+      // Tenta fazer refresh do token
       await refreshToken();
 
+      // Refaz a requisição com o novo token
       const retryResponse = await requestFn();
 
       if (!retryResponse.ok) {
@@ -139,60 +163,92 @@ export const api = {
       ? new URLSearchParams(queryParams as Record<string, string>).toString()
       : "";
 
-    return makeRequestWithRetry<T>(() =>
-      fetch(`${API_BASE_URL}${url}${queryString ? `?${queryString}` : ""}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "x-timezone": getUserTimeZoneForRequest(),
-          ...headers,
-        },
-        credentials: "include",
-      })
-    );
+    return makeRequestWithRetry<T>(async () => {
+      const token = getTokenFromStorage();
+      const requestHeaders: HeadersInit = {
+        "Content-Type": "application/json",
+        "x-timezone": getUserTimeZoneForRequest(),
+        ...headers,
+      };
+
+      // Adiciona o token se disponível e não foi fornecido nos headers customizados
+      if (token && !headers?.Authorization) {
+        requestHeaders.Authorization = `Bearer ${token}`;
+      }
+
+      return fetch(
+        `${API_BASE_URL}${url}${queryString ? `?${queryString}` : ""}`,
+        {
+          method: "GET",
+          headers: requestHeaders,
+          credentials: "include",
+        }
+      );
+    });
   },
 
   async post<T>({ url, data, headers }: PostParams): Promise<T> {
-    return makeRequestWithRetry<T>(() =>
-      fetch(`${API_BASE_URL}${url}`, {
+    return makeRequestWithRetry<T>(async () => {
+      const token = getTokenFromStorage();
+      const requestHeaders: HeadersInit = {
+        "Content-Type": "application/json",
+        "x-timezone": getUserTimeZoneForRequest(),
+        ...headers,
+      };
+
+      if (token && !headers?.Authorization) {
+        requestHeaders.Authorization = `Bearer ${token}`;
+      }
+
+      return fetch(`${API_BASE_URL}${url}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-timezone": getUserTimeZoneForRequest(),
-          ...headers,
-        },
+        headers: requestHeaders,
         body: JSON.stringify(data),
         credentials: "include",
-      })
-    );
+      });
+    });
   },
 
   async put<T>({ url, data, headers }: PutParams): Promise<T> {
-    return makeRequestWithRetry<T>(() =>
-      fetch(`${API_BASE_URL}${url}`, {
+    return makeRequestWithRetry<T>(async () => {
+      const token = getTokenFromStorage();
+      const requestHeaders: HeadersInit = {
+        "Content-Type": "application/json",
+        "x-timezone": getUserTimeZoneForRequest(),
+        ...headers,
+      };
+
+      if (token && !headers?.Authorization) {
+        requestHeaders.Authorization = `Bearer ${token}`;
+      }
+
+      return fetch(`${API_BASE_URL}${url}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "x-timezone": getUserTimeZoneForRequest(),
-          ...headers,
-        },
+        headers: requestHeaders,
         body: JSON.stringify(data),
         credentials: "include",
-      })
-    );
+      });
+    });
   },
 
   async delete<T>({ url, headers }: DeleteParams): Promise<T> {
-    return makeRequestWithRetry<T>(() =>
-      fetch(`${API_BASE_URL}${url}`, {
+    return makeRequestWithRetry<T>(async () => {
+      const token = getTokenFromStorage();
+      const requestHeaders: HeadersInit = {
+        "Content-Type": "application/json",
+        "x-timezone": getUserTimeZoneForRequest(),
+        ...headers,
+      };
+
+      if (token && !headers?.Authorization) {
+        requestHeaders.Authorization = `Bearer ${token}`;
+      }
+
+      return fetch(`${API_BASE_URL}${url}`, {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "x-timezone": getUserTimeZoneForRequest(),
-          ...headers,
-        },
+        headers: requestHeaders,
         credentials: "include",
-      })
-    );
+      });
+    });
   },
 };
